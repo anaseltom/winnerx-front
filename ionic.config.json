@@ -1,0 +1,7 @@
+{
+  "name": "Wcommerce",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

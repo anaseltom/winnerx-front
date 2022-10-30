@@ -1,0 +1,6 @@
+{
+	"appId": "app.winnerx.com",
+	"appName": "WinnerX",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

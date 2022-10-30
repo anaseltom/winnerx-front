@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ionic App</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <base href="/" />
+
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="%PUBLIC_URL%/assets/icon/favicon.png"
+    />
+
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Ionic App" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css" />
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="css/wcommerce.css" type="text/css" />
+    <link rel="stylesheet" href="css/others.css" type="text/css" />
+    <link rel="stylesheet" href="css/pharagraphStyling.css" type="text/css" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+
+  <!-- Js Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- <script>
+    function include(filename)
+    {
+        var head = document.getElementsByTagName('html')[0];
+
+        var script = document.createElement('script');
+        script.src = filename;
+        // script.type = 'text/javascript';     
+
+        head.appendChild(script)
+    }
+
+    document.addEventListener('readystatechange', event => { 
+
+    // When HTML/DOM elements are ready:
+        if (event.target.readyState === "interactive") {
+          setTimeout(function(){
+            include('js/jquery-3.3.1.min.js');
+          }, 3000);
+          setTimeout(function(){
+            include('js/bootstrap.min.js');
+            include('js/jquery.nice-select.min.js');
+            include('js/jquery-ui.min.js');
+            include('js/jquery.slicknav.js');
+            include('js/mixitup.min.js');
+            include('js/owl.carousel.min.js');
+            include('js/main.js');
+          }, 4000);
+        }
+    });
+  </script> -->
+</html>

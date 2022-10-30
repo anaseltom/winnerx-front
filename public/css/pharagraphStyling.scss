@@ -1,0 +1,32 @@
+.pharagraph_wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 20px;
+    max-width: 1020px;
+    margin-bottom: 60px;
+
+    .row {
+        margin: 15px 0;
+        display: flex;
+        flex-direction: column;
+
+        br {
+            margin: 5px 0;
+        }
+
+        .title {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .pharagraph {
+            line-height: 1.6;
+        }
+
+        .bullets {
+            display: inline-block;
+            white-space: pre-wrap;
+        }
+    }
+}
