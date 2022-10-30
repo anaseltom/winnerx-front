@@ -36,14 +36,14 @@ import {
 } from "react-country-region-selector";
 import { RootStore } from "../store";
 
-import {
-  CardElement,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCvcElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+// import {
+//   CardElement,
+//   CardNumberElement,
+//   CardExpiryElement,
+//   CardCvcElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
 import StatusMessages, { useMessages } from "./StatusMessages";
 import axios from "axios";
 
@@ -127,8 +127,8 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     dispatch(Products_Billing(productsBilling, products_cart_total));
   };
 
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
 
   const [items, setItems] = useState<any>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);

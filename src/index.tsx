@@ -8,19 +8,19 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const { publishableKey } = await axios
-    // .get("https://stripe-api.tividad.com/config")
-    // .post("https://ecommerce-api.tividad.com/api/v1/stripe/config")
-    .get("https://api-stripe-apple-pay.tividad.com/config")
-    .then((r) => r.data);
+  // const { publishableKey } = await axios
+  //   // .get("https://stripe-api.tividad.com/config")
+  //   // .post("https://ecommerce-api.tividad.com/api/v1/stripe/config")
+  //   .get("https://api-stripe-apple-pay.tividad.com/config")
+  //   .then((r) => r.data);
 
-  const stripePromise = await loadStripe(publishableKey);
+  // const stripePromise = await loadStripe(publishableKey);
 
   ReactDOM.render(
     <React.StrictMode>
-      <Elements stripe={stripePromise}>
-        <App />
-      </Elements>
+      {/* <Elements stripe={stripePromise}> */}
+      <App />
+      {/* </Elements> */}
     </React.StrictMode>,
     document.getElementById("root")
   );

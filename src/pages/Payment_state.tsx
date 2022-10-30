@@ -36,25 +36,34 @@ const PaymentState: React.FC = () => {
   const [success, setSuccess] = useState<any>(false);
 
   const checkPayment = async () => {
-    const response = await axios.post("http://3.11.79.117:8000/check_payment", {
-      ref,
-    });
-    if (
-      response.status === 200 &&
-      response?.data._embedded?.payment[0]?.state === "CAPTURED"
-    ) {
-      const newArray = await getOrderArray();
+    axios
+      .post("http://3.11.79.117:8000/check_payment", {
+        ref,
+      })
+      .then(async (response) => {
+        console.log(response);
+        if (
+          response.status === 200 &&
+          response?.data._embedded?.payment[0]?.state === "CAPTURED"
+        ) {
+          const newArray = await getOrderArray();
 
-      newArray && createOrder(newArray);
-    } else if (response.status === 404) setSuccess(404);
-    else if (!response || response.status === 500) setSuccess(500);
-    else if (response?.data._embedded?.payment[0]?.state != "CAPTURED")
-      setSuccess(null);
+          newArray && createOrder(newArray);
+        } else if (response?.data._embedded?.payment[0]?.state != "CAPTURED")
+          setSuccess(null);
+      })
+      .catch(({ response }) => {
+        if (response.status === 404) setSuccess(404);
+        else if (!response || response.status === 500) setSuccess(500);
+        else if (response?.data._embedded?.payment[0]?.state != "CAPTURED")
+          setSuccess(null);
+      });
   };
 
   const getOrderArray = async () => {
     let array = products_cart?.map((ar: any, key: number) => {
       const prod = getProd(ar.code);
+      console.log(prod);
       return {
         product_id: prod.id,
         quantity: ar.qty,
@@ -80,8 +89,10 @@ const PaymentState: React.FC = () => {
           items: array,
           payment_status: "paid",
           shipping_address,
+          ref,
         })
         .then((res) => {
+          console.log(res);
           setSuccess(true);
           localStorage.setItem("w-commerce-token-qerfdswe", JSON.stringify([]));
           setTimeout(() => {
@@ -89,6 +100,7 @@ const PaymentState: React.FC = () => {
           }, 5000);
         })
         .catch((err) => {
+          if (err.response.status === 401) return setSuccess(401);
           setSuccess(0);
         });
     }
@@ -132,7 +144,7 @@ const PaymentState: React.FC = () => {
           flex: 1,
           flexDirection: "column",
           boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-          background: "rgba(17, 25, 40, 0.58)",
+          background: "#f3f6fa",
           backdropFilter: "saturate(180%) blur(1px)",
           borderRadius: "12px",
           border: "1px solid rgba(255, 255, 255, 0.125)",
@@ -140,7 +152,7 @@ const PaymentState: React.FC = () => {
       >
         <div style={{ margin: "10px auto" }}>
           <SpinnerDotted
-            style={{ color: "white" }}
+            style={{ color: "black" }}
             enabled={success === false}
           />
         </div>
@@ -163,10 +175,11 @@ const PaymentState: React.FC = () => {
         {(success === 404 ||
           success === 500 ||
           success === 0 ||
-          success === null) && (
+          success === null ||
+          success === 401) && (
           <div style={{ margin: "10px auto" }}>
             <svg
-              style={{ color: "red" }}
+              style={{ color: "#EF4444" }}
               xmlns="http://www.w3.org/2000/svg"
               width="40"
               height="40"
@@ -177,7 +190,7 @@ const PaymentState: React.FC = () => {
               {" "}
               <path
                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"
-                fill="red"
+                fill="#EF4444"
               ></path>{" "}
             </svg>
           </div>
@@ -185,13 +198,14 @@ const PaymentState: React.FC = () => {
         <h1
           style={{
             textAlign: "center",
-            color: "#F0F0F0",
+            color: "#1E293B",
             padding: "15px 15px",
           }}
         >
           {success === true && "Order has been created successfully"}
           {success === 0 && "There was an error creating your order"}
           {success === 404 && "Order with refrence id not found"}
+          {success === 401 && "Order already exists"}
           {success === 500 && "There was a problem with our server"}
           {success === null && "You have not paid for the order"}
         </h1>

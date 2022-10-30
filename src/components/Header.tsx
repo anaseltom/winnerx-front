@@ -15,6 +15,7 @@ import {
   Route,
   Link,
   useParams,
+  useHistory,
 } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +32,7 @@ const Header: React.FC<any> = () => {
     isLogged: false,
   });
   const [hamburger, setHamburger] = useState<any>(false);
-
+  const history = useHistory();
   useEffect(() => {
     dispatch(Product_Cart());
     dispatch(users());
@@ -51,8 +52,26 @@ const Header: React.FC<any> = () => {
   };
 
   useEffect(() => {
+    let htmlEl = document.querySelector("html");
+
     loggedChecker();
+    if (localStorage.getItem("lang") === "en") {
+      htmlEl?.setAttribute("dir", "");
+    }
+    if (localStorage.getItem("lang") === "ar") {
+      htmlEl?.setAttribute("dir", "rtl");
+    }
   }, []);
+  const setEnglishLanguage = () => {
+    localStorage.removeItem("lang");
+    localStorage.setItem("lang", "en");
+    history.push("/");
+  };
+  const setArabicLanguage = () => {
+    localStorage.removeItem("lang");
+    localStorage.setItem("lang", "ar");
+    history.push("/");
+  };
 
   // useEffect(()=>{
   //     if(localStorage.getItem('session')) {
@@ -97,7 +116,22 @@ const Header: React.FC<any> = () => {
         <div className="humberger__menu__widget">
           <div className="header__top__right__language">
             <img src="/assets/img/language.png" alt="" />
-            <div>English</div>
+            <div onClick={() => setEnglishLanguage()}>English</div>
+          </div>
+          <div className="header__top__right__language">
+            <img
+              src="/assets/img/language-1.png"
+              alt=""
+              width="30"
+              height="25"
+            />
+            <div
+              onClick={() => {
+                setArabicLanguage();
+              }}
+            >
+              Arabic
+            </div>
           </div>
           <div className="header__top__right__auth">
             {logged.isLogged ? (
@@ -307,7 +341,7 @@ const Header: React.FC<any> = () => {
                 </Link>
                 <div className="header__cart mobile_cart_wrapper">
                   <ul>
-                    <li>
+                    {/* <li>
                       <Link to={`/wishlist`}>
                         <img
                           className="social_media"
@@ -316,7 +350,8 @@ const Header: React.FC<any> = () => {
                         />{" "}
                         <span>{products_wishlist.length}</span>
                       </Link>
-                    </li>
+                    </li> */}
+
                     <li>
                       <Link to={`/checkout`}>
                         <img
@@ -325,6 +360,23 @@ const Header: React.FC<any> = () => {
                           alt=""
                         />{" "}
                         <span>{products_cart.length}</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={`/profile`}>
+                        <img
+                          style={{
+                            height: "25px",
+                            borderRadius: "20%",
+                          }}
+                          className="social_media margin-l-10"
+                          src={
+                            userProfile.profile_url || "/assets/img/user-p.png"
+                          }
+                          alt=""
+                          width="30px"
+                          height="30px"
+                        />{" "}
                       </Link>
                     </li>
                   </ul>
@@ -358,7 +410,7 @@ const Header: React.FC<any> = () => {
             <div className="col-lg-3">
               <div className="header__cart desktop_cart_wrapper">
                 <ul>
-                  <li>
+                  {/* <li>
                     <Link to={`/wishlist`}>
                       <img
                         className="social_media"
@@ -367,7 +419,7 @@ const Header: React.FC<any> = () => {
                       />{" "}
                       <span>{products_wishlist.length}</span>
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link to={`/checkout`}>
                       <img
@@ -382,9 +434,14 @@ const Header: React.FC<any> = () => {
                     <li>
                       <Link to={`/profile`}>
                         <img
-                          style={{ height: "25px", borderRadius: "20%" }}
+                          style={{
+                            height: "25px",
+                            borderRadius: "20%",
+                          }}
                           className="social_media margin-l-10"
-                          src={userProfile.profile_url}
+                          src={
+                            userProfile.profile_url || "/assets/img/user-p.png"
+                          }
                           alt=""
                           width="30px"
                           height="30px"

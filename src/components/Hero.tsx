@@ -63,14 +63,22 @@ const Hero: React.FC<any> = () => {
       {/* <div className="container"> */}
       <div className="row">
         <div className="col-lg-12 search_hero">
-          <div className="hero__item set-bg">
-            <video
+          <div
+            className="hero__item set-bg"
+            dangerouslySetInnerHTML={{
+              __html: `<video preload="auto" loop muted autoPlay>
+      <source src="assets/img/winnerx-video.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+</video>`,
+            }}
+          >
+            {/* <video
               src="assets/img/winnerx-video.mp4"
               preload="auto"
               muted
               autoPlay
               loop
-            ></video>
+            ></video> */}
             {/* <Swiper modules={[Navigation, Autoplay, Pagination]} pagination={true} navigation={true} autoplay={{delay: 5000, disableOnInteraction: false,}} loop={true} className="mySwiper">
                                 <SwiperSlide className="swiper_slide" style={{backgroundImage: `url('/assets/img/macbook-air.jpg')` }}>
                                     <div className="hero__text">
