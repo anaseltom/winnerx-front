@@ -22,11 +22,11 @@ import axiosInstance from "../utilities/axios";
 
 export const userSignIn =
   (userData: any, SigninResponse: any) => async (dispatch: any) => {
-    console.log("this is the data before signin in", userData);
+    // console.log("this is the data before signin in", userData);
     try {
       var { data } = await axiosInstance.post("user/signin", userData);
 
-      console.log("this is the response data", data);
+      // console.log("this is the response data", data);
       dispatch({
         type: USER_INFO,
         payload: data,
@@ -94,7 +94,7 @@ export const users = () => async (dispatch: any) => {
 
     const { data } = await axiosInstance.post("users/fetch-all", userData);
 
-    console.log("hi", data);
+    // console.log("hi", data);
     dispatch({
       type: USER_INFO,
       payload: data.users[0],
@@ -199,7 +199,7 @@ export const ProductCategories = () => async (dispatch: any) => {
   try {
     const { data } = await axiosInstance.post("categories/fetch-all");
 
-    console.log("hi", data);
+    // console.log("hi", data);
     if (data && data.categories) {
       dispatch({
         type: PRODUCT_CATEGORIES,
@@ -238,7 +238,7 @@ export const Products_list = (product_id: any) => async (dispatch: any) => {
     //   "products/fetch-all",
     // );
     const { data } = await axiosInstance.post("products/deals");
-    console.log(data);
+    // console.log(data);
     if (data && data.products) {
       dispatch({
         type: PRODUCTS_LIST,
@@ -352,7 +352,7 @@ export const Product_Cart_Total =
           var index = products_list?.findIndex(
             (s: any) => s.product_code === ar.code
           );
-          var price = products_list[index].unit_price;
+          var price = products_list[index].unitPrice;
           var qty = ar.qty;
 
           total += price * qty;
@@ -378,8 +378,8 @@ export const Order_list = () => async (dispatch: any) => {
 
     const { data } = await axiosInstance.post("orders/fetch-all", tempData);
 
-    console.log("hi this is the id", user_id);
-    console.log("hi these are the orders", data);
+    // console.log("hi this is the id", user_id);
+    // console.log("hi these are the orders", data);
     if (data && data.orders) {
       dispatch({
         type: USER_ORDER_LIST,
@@ -574,7 +574,7 @@ export const LoadProductId = () => async (dispatch: any) => {
 };
 
 export const Winner_list = () => async (dispatch: any) => {
-  console.log("entered in winner list");
+  // console.log("entered in winner list");
   var user_id;
   if (localStorage.getItem("session_id")) {
     user_id = localStorage.getItem("session_id");
@@ -586,15 +586,15 @@ export const Winner_list = () => async (dispatch: any) => {
     };
 
     var { data } = await axiosInstance.post("users/fetch-all", tempData);
-    console.log("first data", data);
+    // console.log("first data", data);
     if (data && data.users) {
-      console.log("cus id", data?.users[0].customer?.id);
+      // console.log("cus id", data?.users[0].customer?.id);
       const cus_id = {
         customer_id: data?.users[0].customer?.id,
       };
 
       var { data } = await axiosInstance.post("deal_entries/fetch-all", cus_id);
-      console.log("this is the entries data", data);
+      // console.log("this is the entries data", data);
       dispatch({
         type: WINNERS,
         payload: data.deal_entries,

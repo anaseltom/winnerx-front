@@ -10,6 +10,13 @@ import {
   IonTabButton,
 } from "@ionic/react";
 import {
+  IonButton,
+  IonContent,
+  IonPopover,
+  IonList,
+  IonItem,
+} from "@ionic/react";
+import {
   BrowserRouter as Router,
   Switch,
   Route,
@@ -410,7 +417,7 @@ const Header: React.FC<any> = () => {
             <div className="col-lg-3">
               <div className="header__cart desktop_cart_wrapper">
                 <ul>
-                  {/* <li>
+                  <li>
                     <Link to={`/wishlist`}>
                       <img
                         className="social_media"
@@ -419,7 +426,7 @@ const Header: React.FC<any> = () => {
                       />{" "}
                       <span>{products_wishlist.length}</span>
                     </Link>
-                  </li> */}
+                  </li>
                   <li>
                     <Link to={`/checkout`}>
                       <img
@@ -459,8 +466,14 @@ const Header: React.FC<any> = () => {
                     padding: "5px 10px",
                     background: "white",
                     borderRadius: "50px",
+                    cursor: "pointer",
                   }}
                 >
+                  {/* <select style={{ background: "white" }}>
+                    <option>hello</option>
+                    <option>hello</option>
+                    <option>hello</option>
+                  </select> */}
                   {logged.isLogged ? (
                     <a
                       onClick={() => {
@@ -484,7 +497,7 @@ const Header: React.FC<any> = () => {
                       Login
                     </Link>
                   )}
-                </div>
+                </div>{" "}
                 {/* <div className="header__cart__price">item: <span>$150.00</span></div> */}
               </div>
             </div>

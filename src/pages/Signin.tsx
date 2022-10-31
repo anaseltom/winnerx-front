@@ -141,12 +141,12 @@ const Signin: React.FC = () => {
   };
 
   const SigninResponse = (res: any) => {
-    console.log("response", res);
+    // console.log("response", res);
 
     if (res.status == 200) {
       var temp_arr = res;
       temp_arr.session = "121232";
-      console.log("new array", temp_arr);
+      // console.log("new array", temp_arr);
       setSigninMessage({
         ...signinMessage,
         status: "200",
@@ -169,7 +169,7 @@ const Signin: React.FC = () => {
   };
 
   const authentication = () => {
-    console.log("updated ref", ref);
+    // console.log("updated ref", ref);
     dispatch(userSignIn(login, SigninResponse));
   };
   const [signinMessage, setSigninMessage] = useState<any>({

@@ -41,7 +41,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
       var prodIndex = product_value?.findIndex((s: any) => s.code === code);
-      console.log("index", prodIndex);
+      // console.log("index", prodIndex);
 
       if (prodIndex >= 0) {
         if (action == "dec") {
@@ -99,17 +99,13 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
   const deleteProd = (code: any) => {
     dispatch(Product_Wishlist_Delete(code));
   };
-  console.log(product);
+  // console.log(product);
 
   return (
     <tr>
       <td className="shoping__cart__item">
-        <img
-          className="image"
-          src={`/assets/img/product/${product?.imageUrlMain}`}
-          alt=""
-        />
-        <h5>{product?.productName}</h5>
+        <img className="image" src={`${product?.image_url_main}`} alt="" />
+        <h5>{product?.product_name}</h5>
       </td>
       <td className="shoping__cart__price">
         {product?.currencyCode} {numberWithCommas(product?.unitPrice)}

@@ -63,7 +63,7 @@ const PaymentState: React.FC = () => {
   const getOrderArray = async () => {
     let array = products_cart?.map((ar: any, key: number) => {
       const prod = getProd(ar.code);
-      console.log(prod);
+      // console.log(prod);
       return {
         product_id: prod.id,
         quantity: ar.qty,

@@ -39,10 +39,8 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import PaymentState from "./pages/Payment_state";
-import { useEffect } from "react";
-
 setupIonicReact();
-console.log(localStorage.getItem("lang"));
+// console.log(localStorage.getItem("lang"));
 const App: React.FC = () => (
   <Provider store={store}>
     <IonApp>

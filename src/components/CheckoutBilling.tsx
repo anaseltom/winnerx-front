@@ -55,6 +55,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_cart_total = useSelector(
     (state: RootStore) => state.cart_total
   );
+  // console.log(products_cart_total);
   const user = useSelector((state: RootStore) => state.user);
   const dispatch = useDispatch();
   // let productsBilling: any = [];
@@ -181,14 +182,15 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   }, [setProductsBilling, products_cart, products_list]);
 
   // const handleSubmit = async (e: any) => {}
-  console.log(productsBilling);
+  // console.log(productsBilling);
   const handleSubmit = async (e: any) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     e.preventDefault();
-    const response = await axios.post("http://3.11.79.117:8000/payment_api", {
-      amount: 10,
+    const response = await axios.post("http://localhost:8000/payment_api", {
+      amount: products_cart_total?.total,
     });
+    console.log(response);
     localStorage.setItem(
       "w-commerce-billing-address",
       JSON.stringify(billingAddress)
@@ -198,9 +200,9 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     const url = response.data.data._links.payment.href;
     // console.log(resp);
     setUrl(url);
-    console.log(response.data);
-    // window.open(url, "_blank", "ref");
-    window.location.replace(url);
+    // console.log(response.data);
+    window.open(url, "_blank", "ref");
+    // window.location.replace(url);
     // if(processpay)
     // {
     //     return;
@@ -297,7 +299,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     //   paymentSuccess(paymentIntent);
     // }
   };
-  console.log(billingAddress);
+  // console.log(billingAddress);
 
   const paymentSuccess = (intent: any) => {
     console.log("stripe response", intent);

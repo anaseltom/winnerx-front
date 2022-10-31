@@ -33,8 +33,8 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     (state: RootStore) => state.cart_total
   );
   const dispatch = useDispatch();
-  console.log(products_list);
-  console.log(products_cart);
+  // console.log(products_list);
+  // console.log(products_cart);
 
   useEffect(() => {
     dispatch(Products_list(""));

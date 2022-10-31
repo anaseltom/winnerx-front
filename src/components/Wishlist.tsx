@@ -40,7 +40,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("categories");
+    // console.log("categories");
     dispatch(Products_list(""));
   }, []);
 
@@ -65,12 +65,15 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     product_value = JSON.parse(
       localStorage.getItem("w-commerce-token-widerange")!
     );
+    // console.log(product_value);
   }
 
-  const getProd = (code: any) => {
-    var prodIndex = products_list?.findIndex(
-      (s: any) => s.productCode === code
-    );
+  const getProd = (id: any) => {
+    var prodIndex = products_list?.findIndex((s: any) => {
+      console.log(s.id);
+      return s.id === id;
+    });
+    // console.log(prodIndex);
     return products_list[prodIndex];
   };
 
@@ -116,8 +119,8 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                       products_wishlist &&
                       products_wishlist.length > 0 &&
                       products_wishlist.map((ar: any, key: number) => {
-                        const prod = getProd(ar.code);
-                        console.log(products_wishlist);
+                        const prod = getProd(ar.id);
+                        console.log(prod);
                         return (
                           <WishlistSummary
                             key={key}

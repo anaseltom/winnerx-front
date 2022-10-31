@@ -1,17 +1,17 @@
-import { 
-    USER_INFO,
-    USER_SIGNIN,
-    USER_SIGNUP,
-    PRODUCT_CATEGORIES,
-    PRODUCTS_LIST
- } from "../actions/types";
+import {
+  USER_INFO,
+  USER_SIGNIN,
+  USER_SIGNUP,
+  PRODUCT_CATEGORIES,
+  PRODUCTS_LIST,
+} from "../actions/types";
 
 const Products = (state: any = {}, action: any) => {
   switch (action.type) {
     case PRODUCT_CATEGORIES:
       // use the below return code if you have multiple items
       // return { ...state, items: action.payload };
-      console.log("actionpayload", action.payload)
+      // console.log("actionpayload", action.payload)
       return action.payload;
     default:
       return state;
