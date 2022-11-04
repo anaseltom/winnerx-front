@@ -13,6 +13,7 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Product_Cart, Product_Delete } from "../actions/UserAction";
 import { RootStore } from "../store";
+import i18n, { t } from "i18next";
 
 const ProductSummary: React.FC<any> = ({ product }) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const ProductSummary: React.FC<any> = ({ product }) => {
   const numberWithCommas = (x: any) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
+  const language = i18n.language;
   const [present] = useIonToast();
   const presentToast = (position: "top" | "middle" | "bottom") => {
     present({
@@ -50,7 +51,6 @@ const ProductSummary: React.FC<any> = ({ product }) => {
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
       var prodIndex = product_value?.findIndex((s: any) => s.code === code);
-      console.log("index", prodIndex);
 
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += prodQty;
@@ -79,7 +79,10 @@ const ProductSummary: React.FC<any> = ({ product }) => {
   return (
     <>
       {/* {console.log("This is the selected products:", product)} */}
-      <section className="product-details spad">
+      <section
+        className="product-details spad"
+        style={{ textAlign: language === "en" ? "left" : "right" }}
+      >
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-6">
@@ -105,7 +108,11 @@ const ProductSummary: React.FC<any> = ({ product }) => {
             </div>
             <div className="col-lg-6 col-md-6">
               <div className="product__details__text">
-                <h3>{product?.product_name}</h3>
+                <h3>
+                  {language === "en"
+                    ? product?.product_name
+                    : product?.product_name_ar}
+                </h3>
                 <div className="product__details__rating">
                   <img
                     className="social_media"
@@ -133,7 +140,11 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                   {product?.currency_code}{" "}
                   {numberWithCommas(product?.unit_price)}
                 </div>
-                <p>{product?.description}</p>
+                <p>
+                  {language === "en"
+                    ? product?.description
+                    : product?.description_ar}
+                </p>
                 <div className="product__details__quantity">
                   <div className="quantity">
                     <div className="pro-qty">
@@ -163,8 +174,12 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                     presentToast("bottom");
                   }}
                   className="primary-btn"
+                  style={{
+                    letterSpacing: language === "ar" ? "0" : "3px",
+                    fontSize: language === "ar" ? "16px" : "14px",
+                  }}
                 >
-                  ADD TO CART
+                  {t("add_to_cart")}
                 </button>
                 <a className="heart-icon">
                   <img
@@ -176,11 +191,12 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                 <ul>
                   {product?.units_in_stock > 0 ? (
                     <li>
-                      <b>Availability</b> <span>In Stock</span>
+                      <b>{t("availability")}</b> <span>{t("in_stock")}</span>
                     </li>
                   ) : (
                     <li>
-                      <b>Availability</b> <span>Out of Stock</span>
+                      <b>{t("availability")}</b>{" "}
+                      <span>{t("out_of_stock")}</span>
                     </li>
                   )}
                   {/* <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
@@ -207,15 +223,19 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                       role="tab"
                       aria-selected="true"
                     >
-                      Description
+                      {t("description")}
                     </a>
                   </li>
                 </ul>
                 <div className="tab-content">
                   <div className="tab-pane active" id="tabs-1" role="tabpanel">
                     <div className="product__details__tab__desc">
-                      <h6>Products Infomation</h6>
-                      <p>{product?.description}</p>
+                      <h6>{t("products_infomation")}</h6>
+                      <p>
+                        {language === "en"
+                          ? product?.description
+                          : product?.description_ar}
+                      </p>
                     </div>
                   </div>
                 </div>

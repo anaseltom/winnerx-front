@@ -32,6 +32,8 @@ import {
   CountryRegionData,
 } from "react-country-region-selector";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
@@ -41,7 +43,7 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_cart_total = useSelector(
     (state: RootStore) => state.cart_total
   );
-
+  const { t } = useTranslation();
   const [present] = useIonToast();
   const presentToast = (position: "top" | "middle" | "bottom") => {
     present({
@@ -63,6 +65,7 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
     company: "",
     orderNotes: "",
   });
+  const language = i18n.language;
   const [updateMessage, setUpdateMessage] = useState<any>("Saved Succesfully");
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
@@ -200,8 +203,11 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
       <section className="shoping-cart spad">
         <div className="container">
           <div className="row">
-            <div className="header_title">
-              <span>Profile</span>
+            <div
+              className="header_title"
+              style={{ letterSpacing: language === "ar" ? "0" : "10px" }}
+            >
+              <span>{t("profile")}</span>
             </div>
             <form
               className="mb-5"
@@ -267,16 +273,21 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
               </div>
             </form>
           </div>
-          <div className="row">
+          <div
+            className="row"
+            style={{ textAlign: language === "ar" ? "right" : "left" }}
+          >
             <div className="col-lg-12 col-md-12">
               <div className="row">
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      First Name<span>*</span>
+                      {t("first_name")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -290,10 +301,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Last Name<span>*</span>
+                      {t("last_name")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -310,10 +323,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Email Address<span>*</span>
+                      {t("email")}
+                      <span>*</span>
                     </p>
                     <input
                       type="email"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -327,10 +342,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Mobile Number<span>*</span>
+                      {t("mobile")}
+                      <span>*</span>
                     </p>
                     <input
-                      type="tel"
+                      type="number"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -347,10 +364,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Building / Apartment<span>*</span>
+                      {t("bldng")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -364,10 +383,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Street Address<span>*</span>
+                      {t("street")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -384,10 +405,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      Country<span>*</span>
+                      {t("country")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -401,10 +424,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 <div className="col-lg-6">
                   <div className="checkout__input">
                     <p>
-                      City<span>*</span>
+                      {t("city")}
+                      <span>*</span>
                     </p>
                     <input
                       type="text"
+                      style={{ paddingRight: "15px" }}
                       onChange={(e) => {
                         setUserDetails({
                           ...userDetails,
@@ -420,11 +445,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
               <button
                 type="submit"
                 className="site-btn"
+                style={{ fontSize: language === "ar" ? "18px" : "16px" }}
                 onClick={() => {
                   submitEditProfile();
                 }}
               >
-                {"SAVE"}
+                {t("save")}
               </button>
             </div>
           </div>

@@ -46,10 +46,14 @@ import { RootStore } from "../store";
 // } from "@stripe/react-stripe-js";
 import StatusMessages, { useMessages } from "./StatusMessages";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const country = "AE";
 
 const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
+  const { t } = useTranslation();
+  const language = i18n.language;
   const products_list = useSelector((state: RootStore) => state.products_list);
   const products_cart = useSelector((state: RootStore) => state.cart);
   const products_cart_total = useSelector(
@@ -322,10 +326,13 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   return (
     <>
       <Header />
-      <section className="checkout spad">
+      <section
+        className="checkout spad"
+        style={{ textAlign: language === "ar" ? "right" : "left" }}
+      >
         <div className="container">
           <div className="checkout__form">
-            <h4>Billing Details</h4>
+            <h4>{t("billing_details")}</h4>
             <form id="payment-form" onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-lg-6 col-md-6">
@@ -374,15 +381,12 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                                         </div>
                                     </div>
                                 </div> */}
-                  <p>
-                    Please select your delivery address. As default we select
-                    your current home address as delivery address.{" "}
-                  </p>
+                  <p>{t("delivery")} </p>
                   <div className="row">
                     <div className="col-lg-6">
                       <div className="checkout__input">
                         <p>
-                          Full Address <span>*</span>
+                          {t("complete_add")} <span>*</span>
                         </p>
                         <input
                           type="text"
@@ -397,13 +401,33 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                         />
                       </div>
                     </div>
+                    <div className="col-lg-6">
+                      <div className="checkout__input">
+                        <p>
+                          {t("mobile")}
+                          <span>*</span>
+                        </p>
+                        <input
+                          type="number"
+                          required
+                          value={billingAddress.mobile_no}
+                          onChange={(e) => {
+                            setBillingAddress({
+                              ...billingAddress,
+                              mobile_no: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="row">
                     <div className="col-lg-6">
                       <div className="checkout__input">
                         <p>
-                          Country<span>*</span>
+                          {t("country")}
+                          <span>*</span>
                         </p>
                         {/* <input type="text" /> */}
                         <CountryDropdown
@@ -415,7 +439,8 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                     <div className="col-lg-6">
                       <div className="checkout__input">
                         <p>
-                          City<span>*</span>
+                          {t("city")}
+                          <span>*</span>
                         </p>
                         {/* <input type="text" /> */}
                         <RegionDropdown
@@ -431,25 +456,8 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                     <div className="col-lg-6">
                       <div className="checkout__input">
                         <p>
-                          Mobile no.<span>*</span>
-                        </p>
-                        <input
-                          type="number"
-                          required
-                          value={billingAddress.mobile_no}
-                          onChange={(e) => {
-                            setBillingAddress({
-                              ...billingAddress,
-                              mobile_no: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>
-                          Company<span>*</span>
+                          {t("company")}
+                          <span>*</span>
                         </p>
                         <input
                           type="text"
@@ -484,9 +492,14 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="checkout__order">
-                    <h4>Your Order</h4>
+                    <h4>{t("order")}</h4>
                     <div className="checkout__order__products">
-                      Products <span>Total</span>
+                      {t("products")}{" "}
+                      <span
+                        style={{ float: language === "en" ? "right" : "left" }}
+                      >
+                        {t("total")}
+                      </span>
                     </div>
                     <ul>
                       {/* <li>Vegetable’s Package <span>$75.99</span></li>
@@ -510,18 +523,32 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                         })} */}
                     </ul>
                     <div className="checkout__order__subtotal">
-                      Subtotal <span>{products_cart_total?.total}</span>
+                      {t("subtotal")}{" "}
+                      <span
+                        style={{ float: language === "en" ? "right" : "left" }}
+                      >
+                        {products_cart_total?.total}
+                      </span>
                     </div>
                     <div className="checkout__order__total">
-                      Total{" "}
-                      <span>
+                      {t("total")}{" "}
+                      <span
+                        style={{ float: language === "en" ? "right" : "left" }}
+                      >
                         {numberWithCommas(products_cart_total?.total)}
                       </span>
                     </div>
 
                     {/* <p>Add your payment details to confirm your order.</p> */}
 
-                    <button type="submit" className="site-btn">
+                    <button
+                      type="submit"
+                      className="site-btn"
+                      style={{
+                        fontSize: language === "ar" ? "16px" : "14px",
+                        letterSpacing: language === "ar" ? "0" : "5px",
+                      }}
+                    >
                       {processpay ? (
                         <img
                           className="social_media"
@@ -530,7 +557,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                           alt=""
                         />
                       ) : (
-                        "PLACE ORDER"
+                        t("place_order")
                       )}
                     </button>
                   </div>

@@ -8,7 +8,10 @@ import {
   IonRouterOutlet,
   IonApp,
   IonTabButton,
+  IonIcon,
 } from "@ionic/react";
+import { mail } from "ionicons/icons";
+
 import {
   IonButton,
   IonContent,
@@ -29,8 +32,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Product_Cart, Product_Wishlist } from "../actions/UserAction";
 import { RootStore } from "../store";
 import { users } from "../actions/UserAction";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const Header: React.FC<any> = () => {
+  const { t } = useTranslation();
   const products_cart = useSelector((state: RootStore) => state.cart);
   const products_wishlist = useSelector((state: RootStore) => state.wishlist);
   const dispatch = useDispatch();
@@ -39,6 +45,7 @@ const Header: React.FC<any> = () => {
     isLogged: false,
   });
   const [hamburger, setHamburger] = useState<any>(false);
+  const [language, setLanguage] = useState<any>(localStorage.getItem("lang"));
   const history = useHistory();
   useEffect(() => {
     dispatch(Product_Cart());
@@ -48,6 +55,7 @@ const Header: React.FC<any> = () => {
   useEffect(() => {
     dispatch(Product_Wishlist());
   }, []);
+  useEffect(() => {}, [language]);
 
   const loggedChecker = () => {
     if (localStorage.getItem("session_id")) {
@@ -57,28 +65,29 @@ const Header: React.FC<any> = () => {
     }
     // console.log("logged is", logged);
   };
+  useEffect(() => {
+    // console.log(language);
+  }, [language]);
 
   useEffect(() => {
-    let htmlEl = document.querySelector("html");
-
     loggedChecker();
-    if (localStorage.getItem("lang") === "en") {
-      htmlEl?.setAttribute("dir", "");
-    }
-    if (localStorage.getItem("lang") === "ar") {
-      htmlEl?.setAttribute("dir", "rtl");
-    }
+    // if (localStorage.getItem("lang") === "en") {
+    //   htmlEl?.setAttribute("dir", "");
+    // }
+    // if (localStorage.getItem("lang") === "ar") {
+    //   htmlEl?.setAttribute("dir", "rtl");
+    // }
   }, []);
-  const setEnglishLanguage = () => {
-    localStorage.removeItem("lang");
-    localStorage.setItem("lang", "en");
-    history.push("/");
-  };
-  const setArabicLanguage = () => {
-    localStorage.removeItem("lang");
-    localStorage.setItem("lang", "ar");
-    history.push("/");
-  };
+  // const setEnglishLanguage = () => {
+  //   localStorage.removeItem("lang");
+  //   localStorage.setItem("lang", "en");
+  //   history.push("/");
+  // };
+  // const setArabicLanguage = () => {
+  //   localStorage.removeItem("lang");
+  //   localStorage.setItem("lang", "ar");
+  //   history.push("/");
+  // };
 
   // useEffect(()=>{
   //     if(localStorage.getItem('session')) {
@@ -89,7 +98,7 @@ const Header: React.FC<any> = () => {
   //       window.location.href = "/signin";
   //     }
   //   }, [])
-
+  // console.log(i18n.language);
   const logout = () => {
     localStorage.removeItem("session");
     localStorage.removeItem("session_id");
@@ -99,7 +108,6 @@ const Header: React.FC<any> = () => {
     setLogged(false);
     window.location.href = "/home";
   };
-
   return (
     <>
       <div
@@ -120,25 +128,42 @@ const Header: React.FC<any> = () => {
             <img src="/assets/img/storein-bl.png" alt="" />
           </Link>
         </div>
-        <div className="humberger__menu__widget">
-          <div className="header__top__right__language">
+        <div
+          className="humberger__menu__widget"
+          style={{
+            display: language === "ar" ? "flex" : "block",
+          }}
+        >
+          <div
+            className="header__top__right__language"
+            onClick={() => {
+              localStorage.removeItem("lang");
+              localStorage.setItem("lang", "en");
+              setLanguage("en");
+              i18n.changeLanguage("en");
+              document.querySelector("html")?.setAttribute("dir", "ltr");
+            }}
+          >
             <img src="/assets/img/language.png" alt="" />
-            <div onClick={() => setEnglishLanguage()}>English</div>
+            <div>{t("english")}</div>
           </div>
-          <div className="header__top__right__language">
+          <div
+            className="header__top__right__language"
+            onClick={() => {
+              localStorage.removeItem("lang");
+              localStorage.setItem("lang", "ar");
+              setLanguage("ar");
+              i18n.changeLanguage("ar");
+              document.querySelector("html")?.setAttribute("dir", "rtl");
+            }}
+          >
             <img
               src="/assets/img/language-1.png"
               alt=""
               width="30"
               height="25"
             />
-            <div
-              onClick={() => {
-                setArabicLanguage();
-              }}
-            >
-              Arabic
-            </div>
+            <div>{t("arabic")}</div>
           </div>
           <div className="header__top__right__auth">
             {logged.isLogged ? (
@@ -207,20 +232,34 @@ const Header: React.FC<any> = () => {
               <ul>
                 {/* <li className="active"><a href="./index.html" role="menuitem">Home</a></li>
                         <li><a href="./blog.html" role="menuitem">Blog</a></li> */}
-                <li className="">
-                  <Link to={`/home`}>Home</Link>
+                <li
+                  className=""
+                  style={{ textAlign: language === "ar" ? "right" : "left" }}
+                >
+                  <Link to={`/home`}>{t("home")}</Link>
                 </li>
-                <li className="">
-                  <Link to={`/profile`}>Profile</Link>
+                <li
+                  className=""
+                  style={{ textAlign: language === "ar" ? "right" : "left" }}
+                >
+                  <Link to={`/profile`}>{t("profile")}</Link>
                 </li>
                 {/* <li><Link to={`/browse/ref=all`}>Browse</Link></li> */}
                 {logged.isLogged ? (
                   <>
-                    <li>
-                      <Link to={`/account`}>Orders</Link>
+                    <li
+                      style={{
+                        textAlign: language === "ar" ? "right" : "left",
+                      }}
+                    >
+                      <Link to={`/account`}>{t("orders")}</Link>
                     </li>
-                    <li>
-                      <Link to={`/winners`}>Winners</Link>
+                    <li
+                      style={{
+                        textAlign: language === "ar" ? "right" : "left",
+                      }}
+                    >
+                      <Link to={`/winners`}>{t("winners")}</Link>
                     </li>
                   </>
                 ) : (
@@ -232,10 +271,22 @@ const Header: React.FC<any> = () => {
         </div>
         <div className="humberger__menu__contact">
           <ul>
-            <li>
-              <i className="fa fa-envelope"></i> support@storein.com
+            <li style={{ display: "flex", alignItems: "center" }}>
+              <IonIcon
+                icon={mail}
+                style={{ fontSize: "20px", color: "#eebf36" }}
+              ></IonIcon>{" "}
+              <span style={{ marginLeft: "5px", marginRight: "5px" }}>
+                support@storein.com
+              </span>
             </li>
-            <li>Free Shipping for all Order of $99</li>
+            <li
+              style={{
+                textAlign: language === "ar" ? "right" : "left",
+              }}
+            >
+              {t("free_shipping")}
+            </li>
           </ul>
         </div>
       </div>
@@ -348,7 +399,7 @@ const Header: React.FC<any> = () => {
                 </Link>
                 <div className="header__cart mobile_cart_wrapper">
                   <ul>
-                    {/* <li>
+                    <li>
                       <Link to={`/wishlist`}>
                         <img
                           className="social_media"
@@ -357,7 +408,7 @@ const Header: React.FC<any> = () => {
                         />{" "}
                         <span>{products_wishlist.length}</span>
                       </Link>
-                    </li> */}
+                    </li>
 
                     <li>
                       <Link to={`/checkout`}>
@@ -390,20 +441,48 @@ const Header: React.FC<any> = () => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-5">
               <nav className="header__menu">
-                <ul style={{ display: "flex", justifyContent: "center" }}>
+                <ul
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                  }}
+                >
                   <li className="">
-                    <Link to={`/home`}>Home</Link>
+                    <Link
+                      to={`/home`}
+                      style={{
+                        letterSpacing: "0",
+                        fontSize: "18px",
+                        margin: 0,
+                      }}
+                    >
+                      {t("home")}
+                    </Link>
                   </li>
                   {/* <li><Link to={`/browse/ref=all`}>Browse</Link></li> */}
                   {logged.isLogged ? (
                     <>
                       <li>
-                        <Link to={`/account`}>Orders</Link>
+                        <Link
+                          to={`/account`}
+                          style={{
+                            letterSpacing: "0",
+                            fontSize: "18px",
+                            margin: 0,
+                          }}
+                        >
+                          {t("orders")}
+                        </Link>
                       </li>
                       <li>
-                        <Link to={`/winners`}>Winners</Link>
+                        <Link
+                          to={`/winners`}
+                          style={{ letterSpacing: "0", fontSize: "18px" }}
+                        >
+                          {t("winners")}
+                        </Link>
                       </li>
                     </>
                   ) : (
@@ -414,15 +493,29 @@ const Header: React.FC<any> = () => {
                 </ul>
               </nav>
             </div>
-            <div className="col-lg-3">
-              <div className="header__cart desktop_cart_wrapper">
-                <ul>
+            <div className="col-lg-4">
+              <div
+                className="header__cart desktop_cart_wrapper"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <ul
+                  style={{
+                    width: "55%",
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    marginTop: "5px",
+                  }}
+                >
                   <li>
                     <Link to={`/wishlist`}>
                       <img
                         className="social_media"
                         src="/assets/img/003-like-white.png"
                         alt=""
+                        style={{ width: "20px", height: "20px" }}
                       />{" "}
                       <span>{products_wishlist.length}</span>
                     </Link>
@@ -430,22 +523,61 @@ const Header: React.FC<any> = () => {
                   <li>
                     <Link to={`/checkout`}>
                       <img
-                        className="social_media margin-l-10"
+                        className=""
                         src="/assets/img/002-shopping-bag-white.png"
                         alt=""
+                        style={{ width: "20px", height: "20px" }}
                       />{" "}
                       <span>{products_cart.length}</span>
                     </Link>
                   </li>
+                  {language === "en" && (
+                    <li
+                      className="header__top__right__language"
+                      style={{ padding: 0, cursor: "pointer" }}
+                      onClick={() => {
+                        localStorage.removeItem("lang");
+                        localStorage.setItem("lang", "ar");
+                        setLanguage("ar");
+                        i18n.changeLanguage("ar");
+                        document
+                          .querySelector("html")
+                          ?.setAttribute("dir", "rtl");
+                      }}
+                    >
+                      <img
+                        src="/assets/img/language-1.png"
+                        alt=""
+                        width="30"
+                        height="25"
+                      />
+                    </li>
+                  )}
+                  {language === "ar" && (
+                    <li
+                      className="header__top__right__language"
+                      style={{ padding: 0, cursor: "pointer" }}
+                      onClick={() => {
+                        localStorage.removeItem("lang");
+                        localStorage.setItem("lang", "en");
+                        i18n.changeLanguage("en");
+                        setLanguage("en");
+                        document
+                          .querySelector("html")
+                          ?.setAttribute("dir", "ltr");
+                      }}
+                    >
+                      <img src="/assets/img/language.png" alt="" />
+                    </li>
+                  )}
                   {logged.isLogged ? (
                     <li>
                       <Link to={`/profile`}>
                         <img
                           style={{
-                            height: "25px",
                             borderRadius: "20%",
                           }}
-                          className="social_media margin-l-10"
+                          className=""
                           src={
                             userProfile.profile_url || "/assets/img/user-p.png"
                           }
@@ -463,9 +595,9 @@ const Header: React.FC<any> = () => {
                   className="header__top__right__auth"
                   style={{
                     boxSizing: "border-box",
-                    padding: "5px 10px",
+                    padding: "7px 10px",
                     background: "white",
-                    borderRadius: "50px",
+                    borderRadius: "",
                     cursor: "pointer",
                   }}
                 >
@@ -474,6 +606,7 @@ const Header: React.FC<any> = () => {
                     <option>hello</option>
                     <option>hello</option>
                   </select> */}
+
                   {logged.isLogged ? (
                     <a
                       onClick={() => {
@@ -485,7 +618,7 @@ const Header: React.FC<any> = () => {
                         src="/assets/img/user.png"
                         alt=""
                       />{" "}
-                      Logout
+                      {t("logout")}
                     </a>
                   ) : (
                     <Link to={`/signin`}>
@@ -494,9 +627,15 @@ const Header: React.FC<any> = () => {
                         src="/assets/img/user.png"
                         alt=""
                       />{" "}
-                      Login
+                      {t("Login")}
                     </Link>
                   )}
+                  {/* <IonButton id="cover-trigger">Size=Cover</IonButton>
+                  <IonPopover trigger="cover-trigger" size="cover">
+                    <IonContent class="ion-padding" style={{ color: "black" }}>
+                      Hello!
+                    </IonContent>
+                  </IonPopover> */}
                 </div>{" "}
                 {/* <div className="header__cart__price">item: <span>$150.00</span></div> */}
               </div>

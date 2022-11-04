@@ -18,6 +18,8 @@ import { Products_list } from "../actions/UserAction";
 import { Product_Cart, Product_Cart_Total } from "../actions/UserAction";
 import { SpinnerDotted } from "spinners-react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const PaymentState: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,7 +43,6 @@ const PaymentState: React.FC = () => {
         ref,
       })
       .then(async (response) => {
-        console.log(response);
         if (
           response.status === 200 &&
           response?.data._embedded?.payment[0]?.state === "CAPTURED"
@@ -127,6 +128,8 @@ const PaymentState: React.FC = () => {
   // useEffect(() => {
   //   // orderArray && createOrder(orderArray);
   // }, [orderArray]);
+  const { t } = useTranslation();
+  const language = i18n.language;
 
   return (
     <>
@@ -202,12 +205,12 @@ const PaymentState: React.FC = () => {
             padding: "15px 15px",
           }}
         >
-          {success === true && "Order has been created successfully"}
-          {success === 0 && "There was an error creating your order"}
-          {success === 404 && "Order with refrence id not found"}
-          {success === 401 && "Order already exists"}
-          {success === 500 && "There was a problem with our server"}
-          {success === null && "You have not paid for the order"}
+          {success === true && t("order_create")}
+          {success === 0 && t("error_creating")}
+          {success === 404 && t("ref_not")}
+          {success === 401 && t("order_exist")}
+          {success === 500 && t("server_prob")}
+          {success === null && t("not_paid")}
         </h1>
       </div>
 

@@ -118,7 +118,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
             }}
             className="social_media"
             src="/assets/img/002-shopping-bag.png"
-            style={{ minWidth: "16px" }}
+            style={{ minWidth: "16px", cursor: "pointer" }}
             alt=""
           />
           <img
@@ -127,7 +127,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
             }}
             className="social_media"
             src="/assets/img/delete.png"
-            style={{ minWidth: "16px" }}
+            style={{ minWidth: "16px", cursor: "pointer" }}
             alt=""
           />
         </div>

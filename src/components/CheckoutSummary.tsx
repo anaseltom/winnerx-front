@@ -70,7 +70,10 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
 
   return (
     <tr>
-      <td className="shoping__cart__item">
+      <td
+        className="shoping__cart__item"
+        style={{ float: "none", width: "10%" }}
+      >
         <img
           className="image"
           src={`${product?.image_url_main}`}
@@ -79,7 +82,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
         />
         <h5>{product?.product_name}</h5>
       </td>
-      <td className="shoping__cart__price">
+      <td className="shoping__cart__price" align="center">
         {product?.currencyCode} {numberWithCommas(product?.unitPrice)}
       </td>
       <td className="shoping__cart__quantity">
@@ -116,7 +119,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
           }}
           className="social_media"
           src="/assets/img/delete.png"
-          style={{ minWidth: "16px" }}
+          style={{ minWidth: "16px", cursor: "pointer" }}
           alt=""
         />
       </td>

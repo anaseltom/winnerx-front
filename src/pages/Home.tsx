@@ -25,8 +25,10 @@ import "./Home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { users } from "../actions/UserAction";
 import { RootStore } from "../store";
+import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [loader, setLoader] = useState<any>("");
   useEffect(() => {

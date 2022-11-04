@@ -33,7 +33,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ProductDetails from "./ProductDetails";
 import { RootStore } from "../store";
 import { arch } from "os";
-
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 const Winners: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
   const products_cart = useSelector((state: RootStore) => state.cart);
@@ -70,7 +71,8 @@ const Winners: React.FC<any> = ({ feature, title, filterControl }) => {
 
     return formattedDate;
   };
-
+  const { t } = useTranslation();
+  const language = i18n.language;
   var product_value = [];
   if (localStorage.getItem("w-commerce-token-qerfdswe")) {
     product_value = JSON.parse(
@@ -145,17 +147,23 @@ const Winners: React.FC<any> = ({ feature, title, filterControl }) => {
                         </form>
                     </div>
                      */}
-          <div className="checkout__form" style={{ marginTop: "60px" }}>
-            <h4 style={{ marginBottom: "0px" }}>Order Entries</h4>
+          <div
+            className="checkout__form"
+            style={{
+              marginTop: "60px",
+              textAlign: language === "ar" ? "right" : "left",
+            }}
+          >
+            <h4 style={{ marginBottom: "0px" }}>{t("winners")}</h4>
 
             <div className="shoping__cart__table">
               <table>
                 <thead>
                   <tr>
-                    <th style={{ paddingBottom: "0" }}>Entry #</th>
-                    <th style={{ paddingBottom: "0" }}>Entry Reference #</th>
-                    <th style={{ paddingBottom: "0" }}>Price</th>
-                    <th style={{ paddingBottom: "0" }}>Date</th>
+                    <th style={{ paddingBottom: "0" }}>{t("entry")}</th>
+                    <th style={{ paddingBottom: "0" }}>{t("refrence")}</th>
+                    <th style={{ paddingBottom: "0" }}>{t("price")}</th>
+                    <th style={{ paddingBottom: "0" }}>{t("date")}</th>
                   </tr>
                 </thead>
                 <tbody>

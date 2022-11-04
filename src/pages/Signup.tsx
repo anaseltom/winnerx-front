@@ -11,9 +11,11 @@ import React, { useState } from "react";
 import { userSignUp, usersUpdate } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../store";
+import i18n, { t } from "i18next";
 
 const Signup: React.FC = () => {
   const user = useSelector((state: RootStore) => state.user);
+  const language = i18n.language;
 
   const [signupMessage, setSignupMessage] = useState<any>({
     status: "500",
@@ -36,18 +38,22 @@ const Signup: React.FC = () => {
   const dispatch = useDispatch();
 
   const SignupResponse = (res: any) => {
-    console.log(res);
-
     if (res.status == 200) {
       setSignupMessage({
         ...signupMessage,
         status: "200",
         message: "Signup successfully.",
+        color: "#d4edda",
       });
       console.log("response from signup", res);
       dispatch(usersUpdate(res.id, res.utk, verificationMode));
     } else {
-      setSignupMessage({ ...signupMessage, status: "500", message: res.msg });
+      setSignupMessage({
+        ...signupMessage,
+        status: "500",
+        message: res.msg,
+        color: "#f8d7da",
+      });
     }
   };
 
@@ -59,6 +65,7 @@ const Signup: React.FC = () => {
         ...signupMessage,
         status: "500",
         message: "Password did not match",
+        color: "#f8d7da",
       });
     }
   };
@@ -73,7 +80,10 @@ const Signup: React.FC = () => {
     <>
       <div
         className="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
-        style={{ backgroundImage: `url(assets/img/shopping.jpg)` }}
+        style={{
+          backgroundImage: `url(assets/img/shopping.jpg)`,
+          textAlign: language === "en" ? "left" : "right",
+        }}
       >
         <div className="auth-box row">
           <div className="signup-box col-lg-8 col-md-8">
@@ -85,13 +95,27 @@ const Signup: React.FC = () => {
                   alt="wrapkit"
                 />
               </div>
-              <h2 className="mt-3 text-center">Sign Up</h2>
-              <p className="text-center">Fill up information to sign in.</p>
-              <h6 style={{ marginBottom: "10px" }}>{signupMessage.message}</h6>
+              <h2 className="mt-3 text-center">{t("sign_up")}</h2>
+              <p className="text-center">{t("fill_information")}</p>
+              {signupMessage && (
+                <h4
+                  style={{
+                    marginBottom: "10px",
+                    lineHeight: "1",
+                    background: signupMessage.color,
+                    height: "40px",
+                    textAlign: "center",
+                    paddingTop: "8px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  {signupMessage.message}
+                </h4>
+              )}
               <div className="row">
                 <div className="col-lg-12">
                   <div className="form-group">
-                    <label className="text-dark">First Name</label>
+                    <label className="text-dark">{t("first_name")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.first_name}
@@ -100,11 +124,11 @@ const Signup: React.FC = () => {
                       }}
                       id="fname"
                       type="text"
-                      placeholder="enter your first name"
+                      placeholder={t("first_name_")}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="text-dark">Last Name</label>
+                    <label className="text-dark">{t("last_name")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.last_name}
@@ -113,11 +137,11 @@ const Signup: React.FC = () => {
                       }}
                       id="lname"
                       type="text"
-                      placeholder="enter your last name"
+                      placeholder={t("last_name_")}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="text-dark">Email</label>
+                    <label className="text-dark">{t("email")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.email}
@@ -126,10 +150,10 @@ const Signup: React.FC = () => {
                       }}
                       id="email"
                       type="email"
-                      placeholder="enter your email"
+                      placeholder={t("email_")}
                     />
                   </div>
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label className="text-dark">Username</label>
                     <input
                       className="form-control email forms_required"
@@ -141,9 +165,9 @@ const Signup: React.FC = () => {
                       type="text"
                       placeholder="enter your username"
                     />
-                  </div>
+                  </div> */}
                   <div className="form-group">
-                    <label className="text-dark">Complete Address</label>
+                    <label className="text-dark">{t("complete_add")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.address}
@@ -152,11 +176,11 @@ const Signup: React.FC = () => {
                       }}
                       id="address"
                       type="text"
-                      placeholder="enter your complete address"
+                      placeholder={t("complete_add_")}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="text-dark">Password</label>
+                    <label className="text-dark">{t("password")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.password}
@@ -165,11 +189,11 @@ const Signup: React.FC = () => {
                       }}
                       id="password"
                       type="password"
-                      placeholder="enter your password"
+                      placeholder={t("password_")}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="text-dark">Confirm Password</label>
+                    <label className="text-dark">{t("confirm_pass")}</label>
                     <input
                       className="form-control email forms_required"
                       value={signup.confirmPassword}
@@ -181,7 +205,7 @@ const Signup: React.FC = () => {
                       }}
                       id="c-password"
                       type="password"
-                      placeholder="Re-enter your password"
+                      placeholder={t("confirm_pass_")}
                     />
                   </div>
                 </div>
@@ -193,13 +217,13 @@ const Signup: React.FC = () => {
                     }}
                     className="btn btn-block btn-dark login_button"
                   >
-                    Sign Up
+                    {t("sign_up")}
                   </button>
                 </div>
                 <div className="col-lg-12 text-center mt-5">
-                  Already having an account?{" "}
+                  {t("have_account")}{" "}
                   <a href="./signin" className="text-danger">
-                    Sign In
+                    {t("sign_in")}
                   </a>
                 </div>
               </div>

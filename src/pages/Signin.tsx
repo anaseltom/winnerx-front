@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { RootStore } from "../store";
+import i18n, { t } from "i18next";
 
 declare global {
   interface Window {
@@ -24,7 +25,6 @@ declare global {
 const Signin: React.FC = () => {
   function handleCallbackResponse(response: any) {
     const userObject: any = jwt_decode(response.credential);
-    console.log("encoded JWT ID toekn", userObject);
 
     if (userObject && userObject?.email_verified) {
       // window.location.href = "/home";
@@ -45,14 +45,10 @@ const Signin: React.FC = () => {
       width: "100%",
     });
   }, []);
+  const language = i18n.language;
+  const handleFailure = (result: any) => {};
 
-  const handleFailure = (result: any) => {
-    console.log("Failed", result);
-  };
-
-  const handleLogin = (googleData: any) => {
-    console.log(googleData);
-  };
+  const handleLogin = (googleData: any) => {};
 
   const user = useSelector((state: RootStore) => state.user);
   const [ref, setRef] = useState<any>("none");
@@ -69,7 +65,6 @@ const Signin: React.FC = () => {
     if (id) {
       setRef(id);
       // setLogin({...login, billing:id=="redirect" ? true : false})
-      console.log("ref", ref);
     }
   };
 
@@ -92,15 +87,9 @@ const Signin: React.FC = () => {
   // This is for the social media login - first we need to register the user
 
   const SignupResponse = (res: any) => {
-    console.log(res);
-
     if (res.status == 200) {
-      console.log("success, response from signup", res);
       dispatch(usersUpdate(res.id, res.utk, verificationMode));
     } else {
-      console.log("already exist, response from signup", res);
-      console.log("Logging in");
-
       dispatch(
         userSignIn(
           {
@@ -137,7 +126,6 @@ const Signin: React.FC = () => {
     // setTimeout(() => {
     //   window.location.href = "/signin";
     // }, 500);
-    console.log("registered");
   };
 
   const SigninResponse = (res: any) => {
@@ -151,6 +139,7 @@ const Signin: React.FC = () => {
         ...signinMessage,
         status: "200",
         message: "Signin successfully.",
+        color: "#d4edda",
       });
       localStorage.setItem("session", "live");
       localStorage.setItem("session_id", temp_arr.id);
@@ -164,7 +153,12 @@ const Signin: React.FC = () => {
         window.location.href = "/home";
       }
     } else if (res.status == 500) {
-      setSigninMessage({ ...signinMessage, status: "200", message: res.msg });
+      setSigninMessage({
+        ...signinMessage,
+        status: "200",
+        message: res.msg,
+        color: "#f8d7da",
+      });
     }
   };
 
@@ -175,6 +169,7 @@ const Signin: React.FC = () => {
   const [signinMessage, setSigninMessage] = useState<any>({
     status: "500",
     message: "",
+    color: "#f8d7da",
   });
 
   return (
@@ -189,17 +184,31 @@ const Signin: React.FC = () => {
               {/* <div className="text-center">
                             <img className="comp_logo" src="assets/img/winnerX-logo.png" alt="wrapkit" />
                         </div> */}
-              <h2 className="mt-3 text-center">Sign In</h2>
-              <p className="text-center">
-                Enter your email address and password.
-              </p>
-              <h6 style={{ fontSize: "13px", lineHeight: "1" }}>
-                {signinMessage.message}
-              </h6>
-              <div className="row">
+              <h2 className="mt-3 text-center">{t("sign_in")}</h2>
+              <p className="text-center">{t("email&password")}</p>
+              {console.log(signinMessage)}
+              {signinMessage?.message && (
+                <h4
+                  style={{
+                    fontSize: "13px",
+                    lineHeight: "1",
+                    background: signinMessage.color,
+                    height: "40px",
+                    textAlign: "center",
+                    paddingTop: "8px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  {signinMessage.message}
+                </h4>
+              )}
+              <div
+                className="row"
+                style={{ textAlign: language === "ar" ? "right" : "left" }}
+              >
                 <div className="col-lg-12">
                   <div className="form-group">
-                    <label className="text-dark">Email</label>
+                    <label className="text-dark">{t("email")}</label>
                     <input
                       className="form-control email forms_required"
                       id="uname"
@@ -208,13 +217,18 @@ const Signin: React.FC = () => {
                         setLogin({ ...login, email: e.target.value });
                       }}
                       type="text"
-                      placeholder="enter your email"
+                      placeholder={
+                        language === "en"
+                          ? "enter your email"
+                          : "أدخل البريد الإلكتروني"
+                      }
                     />
                   </div>
                 </div>
                 <div className="col-lg-12">
                   <div className="form-group">
-                    <label className="text-dark">Password</label>
+                    <label className="text-dark">{t("password")}</label>
+                    {console.log(login)}
                     <input
                       className="form-control password forms_required"
                       id="pwd"
@@ -223,7 +237,11 @@ const Signin: React.FC = () => {
                         setLogin({ ...login, password: e.target.value });
                       }}
                       type="password"
-                      placeholder="enter your password"
+                      placeholder={
+                        language === "en"
+                          ? "enter your password"
+                          : "أدخل كلمة السر"
+                      }
                     />
                   </div>
                 </div>
@@ -235,14 +253,14 @@ const Signin: React.FC = () => {
                     type="submit"
                     className="btn btn-block btn-dark login_button"
                   >
-                    Sign In
+                    {t("sign_in")}
                   </button>
                 </div>
                 <div id="signInDiv" data-width="100%" data-height="200"></div>
                 <div className="col-lg-12 text-center mt-5">
-                  Don't have an account?{" "}
+                  {t("no_account")}{" "}
                   <a href="./signup" className="text-danger">
-                    Sign Up
+                    {t("sign_up")}
                   </a>
                 </div>
               </div>

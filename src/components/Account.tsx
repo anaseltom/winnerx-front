@@ -31,6 +31,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import ProductDetails from "../components/ProductDetails";
 import { RootStore } from "../store";
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 
 const Account: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
@@ -40,8 +42,9 @@ const Account: React.FC<any> = ({ feature, title, filterControl }) => {
   const [refundIsOpen, setRefundIsOpen] = useState<any>(false);
   const [updateProdSummary, setUpdateProdSummary] = useState<any>({});
   const [prodIsOpen, setProdIsOpen] = useState<any>(false);
-
   const { id } = useParams<any>();
+  const { t } = useTranslation();
+  const language = i18n.language;
 
   const Child = () => {
     if (id) {
@@ -104,7 +107,7 @@ const Account: React.FC<any> = ({ feature, title, filterControl }) => {
 
   useEffect(() => {
     // console.log("orders");
-    const user_id = dispatch(Order_list());
+    dispatch(Order_list());
   }, []);
 
   return (
@@ -158,8 +161,14 @@ const Account: React.FC<any> = ({ feature, title, filterControl }) => {
                         </form>
                     </div>
                      */}
-          <div className="checkout__form" style={{ marginTop: "60px" }}>
-            <h4 style={{ marginBottom: "0px" }}>Orders History</h4>
+          <div
+            className="checkout__form"
+            style={{
+              marginTop: "60px",
+              textAlign: language === "ar" ? "right" : "left",
+            }}
+          >
+            <h4 style={{ marginBottom: "0px" }}>{t("order_history")}</h4>
 
             <div className="shoping__cart__table">
               <table>

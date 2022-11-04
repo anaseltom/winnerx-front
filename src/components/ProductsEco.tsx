@@ -27,6 +27,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import ProductDetails from "./ProductDetails";
 import { RootStore } from "../store";
+import i18next, { t } from "i18next";
 
 const Products: React.FC<any> = ({
   feature,
@@ -47,14 +48,14 @@ const Products: React.FC<any> = ({
   useEffect(() => {
     setFilterProduct(filterBy);
   }, [filterBy]);
-
+  const language = i18next.language;
+  // console.log(language);
   const addToCart = (code: any) => {
     if (localStorage.getItem("w-commerce-token-qerfdswe")) {
       var product_value = JSON.parse(
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
       var prodIndex = product_value?.findIndex((s: any) => s.code === code);
-      console.log("index", prodIndex);
 
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += 1;
@@ -132,7 +133,7 @@ const Products: React.FC<any> = ({
   };
 
   const filterProd = (items: any) => {
-    return !items.is_recyclable;
+    return !items.is_recyclable && items.product_name_ar;
   };
 
   return (
@@ -173,10 +174,21 @@ const Products: React.FC<any> = ({
                     <div className="featured__item">
                       <div className="prod_qty_info">
                         <span className="info_text">
-                          {ar.unitsInStock} sold out of {ar.units_in_stock}
+                          {t("sold", {
+                            sold: ar.unitsInStock || 0,
+                            available: ar.units_in_stock,
+                          })}
+                          {/* {ar.unitsInStock} sold out of {ar.units_in_stock} */}
                         </span>
                         <div className="bar">
-                          <div className="progress"></div>
+                          <div
+                            className="progress"
+                            style={{
+                              width: `${
+                                (ar.unitsInStock / ar.units_in_stock) * 100
+                              }%`,
+                            }}
+                          ></div>
                         </div>
                       </div>
 
@@ -190,7 +202,12 @@ const Products: React.FC<any> = ({
                           {/* <img src={ar?.image_url_main} alt=""/> */}
                         </div>
                         <div className="item_title">
-                          {truncateString(ar?.product_name, 15)}
+                          {truncateString(
+                            language === "ar"
+                              ? ar?.product_name_ar
+                              : ar.product_name,
+                            15
+                          )}
                         </div>
                       </div>
 

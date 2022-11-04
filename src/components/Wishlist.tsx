@@ -29,6 +29,8 @@ import {
 } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../store";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
@@ -47,6 +49,8 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   useEffect(() => {
     dispatch(Product_Wishlist());
   }, []);
+  const { t } = useTranslation();
+  const language = i18n.language;
 
   useEffect(() => {
     dispatch(Product_Cart());
@@ -99,18 +103,35 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
       <section className="shoping-cart spad">
         <div className="container">
           <div className="row">
-            <div className="header_title">
-              <span>WISHLIST</span>
+            <div
+              className="header_title"
+              style={{ letterSpacing: language === "ar" ? "0" : "10px" }}
+            >
+              <span>{t("wishlist")}</span>
             </div>
           </div>
-          <div className="row">
+          <div
+            className="row"
+            style={{ marginBottom: "40px", textAlign: "center" }}
+          >
             <div className="col-lg-12">
-              <div className="shoping__cart__table">
-                <table>
+              <div
+                className=""
+                style={{
+                  borderTop: "solid 0.5px gray",
+                  borderBottom: "solid 0.5px gray",
+                  padding: "20px 5px",
+                  width: "100%",
+                }}
+              >
+                <table
+                  style={{ width: "100%" }}
+                  dir={language === "ar" ? "rtl" : "ltr"}
+                >
                   <thead>
                     <tr>
-                      <th className="shoping__product">Products</th>
-                      <th>Price</th>
+                      <th className="shoping__product">{t("products")}</th>
+                      <th>{t("price")}</th>
                       <th style={{ textAlign: "right" }}></th>
                     </tr>
                   </thead>
@@ -120,7 +141,6 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                       products_wishlist.length > 0 &&
                       products_wishlist.map((ar: any, key: number) => {
                         const prod = getProd(ar.id);
-                        console.log(prod);
                         return (
                           <WishlistSummary
                             key={key}
@@ -138,8 +158,14 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
             <div className="col-lg-12">
               <div className="shoping__cart__btns">
                 <Link to={`/browse/ref=all`}>
-                  <button className="primary-btn cart-btn">
-                    CONTINUE SHOPPING
+                  <button
+                    className="primary-btn cart-btn"
+                    style={{
+                      fontSize: language === "ar" ? "16px" : "14px",
+                      letterSpacing: language === "ar" ? "0" : "1px",
+                    }}
+                  >
+                    {t("continue_shopping")}
                   </button>
                 </Link>
                 {/* <a href="#" className="primary-btn cart-btn cart-btn-right"><span className="icon_loading"></span>

@@ -25,6 +25,8 @@ import { Products_list } from "../actions/UserAction";
 import { Product_Cart, Product_Cart_Total } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../store";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
@@ -35,6 +37,8 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   const dispatch = useDispatch();
   // console.log(products_list);
   // console.log(products_cart);
+  const { t } = useTranslation();
+  const language = i18n.language;
 
   useEffect(() => {
     dispatch(Products_list(""));
@@ -93,20 +97,37 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
       <section className="shoping-cart spad">
         <div className="container">
           <div className="row">
-            <div className="header_title">
-              <span>CART</span>
+            <div
+              className="header_title"
+              style={{ letterSpacing: language === "ar" ? "0" : "10px" }}
+            >
+              <span>{t("cart")}</span>
             </div>
           </div>
-          <div className="row">
+          <div
+            className="row"
+            style={{ marginBottom: "40px", textAlign: "center" }}
+          >
             <div className="col-lg-12">
-              <div className="shoping__cart__table">
-                <table>
+              <div
+                className=""
+                style={{
+                  borderTop: "solid 0.5px gray",
+                  borderBottom: "solid 0.5px gray",
+                  padding: "20px 5px",
+                  width: "100%",
+                }}
+              >
+                <table
+                  style={{ width: "100%" }}
+                  dir={language === "ar" ? "rtl" : "ltr"}
+                >
                   <thead>
                     <tr>
-                      <th className="shoping__product">Products</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Total</th>
+                      <th className="shoping__product">{t("products")}</th>
+                      <th>{t("price")}</th>
+                      <th>{t("quantity")}</th>
+                      <th>{t("total")}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -133,8 +154,14 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
             <div className="col-lg-12">
               <div className="shoping__cart__btns">
                 <Link to={`/home`}>
-                  <button className="primary-btn cart-btn">
-                    CONTINUE SHOPPING
+                  <button
+                    className="primary-btn cart-btn"
+                    style={{
+                      letterSpacing: language === "ar" ? "0" : "1px",
+                      fontSize: language === "ar" ? "18px" : "16px",
+                    }}
+                  >
+                    {t("continue_shopping")}
                   </button>
                 </Link>
                 {/* <a href="#" className="primary-btn cart-btn cart-btn-right"><span className="icon_loading"></span>
@@ -152,23 +179,40 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                                 </div>
                             </div>
                         </div> */}
-            <div className="col-lg-6">
+            <div
+              className="col-lg-6"
+              style={{ textAlign: language === "ar" ? "right" : "left" }}
+            >
               <div className="shoping__checkout">
-                <h5>Cart Total</h5>
+                <h5>{t("cart_total")}</h5>
                 <ul>
                   <li>
-                    Subtotal{" "}
-                    <span>{numberWithCommas(products_cart_total?.total)}</span>
+                    {t("subtotal")}{" "}
+                    <span
+                      style={{ float: language === "ar" ? "left" : "right" }}
+                    >
+                      {numberWithCommas(products_cart_total?.total)}
+                    </span>
                   </li>
                   <li>
-                    Total{" "}
-                    <span>{numberWithCommas(products_cart_total?.total)}</span>
+                    {t("total")}{" "}
+                    <span
+                      style={{ float: language === "ar" ? "left" : "right" }}
+                    >
+                      {numberWithCommas(products_cart_total?.total)}
+                    </span>
                   </li>
                 </ul>
                 {products_cart.length > 0 ? (
                   <Link to={`/confirm_checkout`}>
-                    <button className="primary-btn checkout_button">
-                      PROCEED TO CHECKOUT
+                    <button
+                      className="primary-btn checkout_button"
+                      style={{
+                        letterSpacing: language === "ar" ? "0" : "1px",
+                        fontSize: language === "ar" ? "18px" : "16px",
+                      }}
+                    >
+                      {t("proceed_to_checkout")}
                     </button>
                   </Link>
                 ) : (
@@ -177,7 +221,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                     to={`/confirm_checkout`}
                   >
                     <button className="warning-btn checkout_button">
-                      PROCEED TO CHECKOUT
+                      {t("proceed_to_checkout")}
                     </button>
                   </Link>
                 )}

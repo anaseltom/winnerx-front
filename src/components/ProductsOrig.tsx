@@ -20,6 +20,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import ProductDetails from "./ProductDetails";
 import { RootStore } from "../store";
+import i18n, { t } from "i18next";
 
 const Products: React.FC<any> = ({
   feature,
@@ -47,6 +48,7 @@ const Products: React.FC<any> = ({
   const [activeTab, setActiveTab] = useState<any>(1);
   const [updateProdSummary, setUpdateProdSummary] = useState<any>({});
   const DisableProductId = false;
+  const language = i18n.language;
 
   useEffect(() => {
     setFilterProduct(filterBy);
@@ -58,7 +60,6 @@ const Products: React.FC<any> = ({
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
       var prodIndex = product_value?.findIndex((s: any) => s.code === code);
-      // console.log("index", prodIndex);
 
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += 1;
@@ -85,7 +86,7 @@ const Products: React.FC<any> = ({
   };
 
   const addToWishlist = (id: any) => {
-    console.log("hello");
+    // console.log("hello");
     if (localStorage.getItem("w-commerce-token-widerange")) {
       var product_value = JSON.parse(
         localStorage.getItem("w-commerce-token-widerange")!
@@ -93,7 +94,7 @@ const Products: React.FC<any> = ({
       var prodIndex = product_value?.findIndex((s: any) => s.id === id);
       // console.log("index", prodIndex);
 
-      console.log(prodIndex);
+      // console.log(prodIndex);
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += 1;
         localStorage.setItem(
@@ -175,32 +176,54 @@ const Products: React.FC<any> = ({
                       backgroundImage: `url('assets/img/product-bg.jpeg')`,
                     }}
                   >
-                    <div className="prod_qty_info">
+                    <div
+                      className="prod_qty_info"
+                      style={{ marginRight: language === "ar" ? "20px" : "" }}
+                    >
                       <span className="info_text">
-                        {ar?.deal_products[0]?.quantity_sold} sold out of{" "}
-                        {ar?.deal_products[0]?.quantity_max}
+                        {/* تحتاج تعديلا */}
+                        {t("sold", {
+                          sold: ar?.deal_products[0].quantity_sold,
+                          available: ar?.deal_products[0].quantity_max,
+                        })}
+                        {/* {ar?.deal_products[0]?.quantity_sold} sold out of{" "}
+                        {ar?.deal_products[0]?.quantity_max} */}
                       </span>
                       <div className="bar">
-                        <div className="progress"></div>
+                        <div
+                          className="progress"
+                          style={{
+                            width: `${
+                              (ar?.deal_products[0].quantity_sold /
+                                ar?.deal_products[0].quantity_max) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
                       </div>
                     </div>
 
                     <div className="items_wrapper">
                       <div className="items buy">
-                        <div className="item_header">BUY</div>
+                        <div className="item_header">{t("buy")}</div>
                         <img
                           src={ar?.deal_products[0]?.product?.image_url_main}
                           alt=""
                         />
                         <div className="item_title">
-                          {ar?.deal_products[0]?.product?.product_name}
+                          {language === "en"
+                            ? ar?.deal_products[0]?.product?.product_name
+                            : ar?.deal_products[0]?.product?.product_name_ar}
                         </div>
                         <div className="item_subtitle"></div>
                       </div>
                       <div className="items win">
-                        <div className="item_header">WIN</div>
+                        <div className="item_header">{t("win")}</div>
+
                         <img src={ar.image_url_main} alt="" />
-                        <div className="item_title">{ar.name}</div>
+                        <div className="item_title">
+                          {language === "en" ? ar.name : ar.name_ar}
+                        </div>
                         <div className="item_subtitle"></div>
                       </div>
                     </div>
@@ -214,14 +237,29 @@ const Products: React.FC<any> = ({
                             // console.log(ar.deal_products[0].product);
                           }}
                           className="details item"
+                          style={{
+                            fontSize: language === "ar" ? "18px" : "14px",
+                            borderRight:
+                              language === "en" ? "solid .5px gray" : "",
+                            borderLeft:
+                              language === "ar" ? "solid .5px gray" : "",
+                          }}
                         >
-                          VIEW PRODUCT
+                          {t("view_product")}
                         </div>
-                        <div className="price item">
+                        <div
+                          className="price item"
+                          style={{
+                            fontSize: "18px",
+                          }}
+                        >
                           {ar?.deal_products[0]?.product?.currency_code}{" "}
                           {numberWithCommas(
                             ar?.deal_products[0]?.product?.unit_price
                           )}
+                          {/* {console.log(
+                            ar?.deal_products[0]?.product?.unit_price
+                          )} */}
                         </div>
                         <div
                           onClick={(e) => {
@@ -232,8 +270,15 @@ const Products: React.FC<any> = ({
                             presentToast("bottom");
                           }}
                           className="button item"
+                          style={{
+                            fontSize: language === "ar" ? "18px" : "14px",
+                            borderRight:
+                              language === "ar" ? "solid .5px gray" : "",
+                            borderLeft:
+                              language === "en" ? "solid .5px gray" : "",
+                          }}
                         >
-                          ADD TO CART
+                          {t("add_to_cart")}
                         </div>
                       </div>
                     </div>
