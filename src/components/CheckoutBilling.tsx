@@ -204,11 +204,10 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     );
     setBillingAddress({});
 
-    const url = response.data.data._links.payment.href;
+    const url = response?.data?.data?._links?.payment?.href;
     // console.log(resp);
-    setUrl(url);
     // console.log(response.data);
-    window.open(url, "_blank", "ref");
+    window.open(url, "_self");
     // window.location.replace(url);
     // if(processpay)
     // {
