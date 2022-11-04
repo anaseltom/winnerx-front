@@ -69,6 +69,9 @@ const App: React.FC = () => {
     if (localStorage.getItem("lang") === "en") {
       document.querySelector("html")?.setAttribute("dir", "ltr");
     }
+    if (!localStorage.getItem("lang")) {
+      localStorage.setItem("lang", "en");
+    }
   }, []);
   return (
     <Suspense fallback="Loading...">
