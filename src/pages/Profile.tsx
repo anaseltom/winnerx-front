@@ -161,7 +161,7 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
       const fd = new FormData();
       fd.append("image", file, file.name);
       const resp = await axios.post(
-        `http://3.11.79.117:8000/upload/profile/${userProfile?.id}`,
+        `https://winnerx.herokuapp.com/upload/profile/${userProfile?.id}`,
         fd
       );
       if (resp.status === 200) {

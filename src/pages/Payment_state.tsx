@@ -39,7 +39,7 @@ const PaymentState: React.FC = () => {
 
   const checkPayment = async () => {
     axios
-      .post("http://3.11.79.117:8000/check_payment", {
+      .post("https://winnerx.herokuapp.com/check_payment", {
         ref,
       })
       .then(async (response) => {
@@ -83,7 +83,7 @@ const PaymentState: React.FC = () => {
 
     if (array.length > 0) {
       axios
-        .post("http://3.11.79.117:8000/api/v1/orders/update", {
+        .post("https://winnerx.herokuapp.com/api/v1/orders/update", {
           id: 0,
           customer_id: userProfile.id,
           status: "active",
