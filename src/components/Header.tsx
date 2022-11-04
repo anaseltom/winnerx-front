@@ -49,7 +49,7 @@ const Header: React.FC<any> = () => {
   const history = useHistory();
   useEffect(() => {
     dispatch(Product_Cart());
-    dispatch(users());
+    // dispatch(users());
   }, []);
 
   useEffect(() => {
@@ -123,10 +123,33 @@ const Header: React.FC<any> = () => {
           hamburger ? "hamburger_toggle_on" : ""
         }`}
       >
-        <div className="humberger__menu__logo">
+        <div className="humberger__menu__logo" style={{ marginBottom: "10px" }}>
           <Link to={`/home`}>
             <img src="/assets/img/storein-bl.png" alt="" />
           </Link>
+        </div>
+        <div
+          style={{
+            display: "block",
+            width: "100%",
+            textAlign: "center",
+            marginBottom: "10px",
+          }}
+        >
+          <button
+            type="submit"
+            className="site-btn"
+            style={{
+              fontSize: language === "ar" ? "18px" : "16px",
+              margin: "0 auto",
+              width: "100%",
+            }}
+            onClick={() => {
+              logged.isLogged ? logout() : history.push("/signin");
+            }}
+          >
+            {logged.isLogged ? t("logout") : t("login")}
+          </button>
         </div>
         <div
           className="humberger__menu__widget"
@@ -421,7 +444,8 @@ const Header: React.FC<any> = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to={`/profile`}>
+                      <Link to={logged.isLogged ? `/profile` : "/signin"}>
+                        {/* {console.log(userProfile)} */}
                         <img
                           style={{
                             height: "25px",
@@ -429,7 +453,9 @@ const Header: React.FC<any> = () => {
                           }}
                           className="social_media margin-l-10"
                           src={
-                            userProfile.profile_url || "/assets/img/user-p.png"
+                            userProfile.profile_url != null
+                              ? userProfile.profile_url
+                              : "/assets/img/user-p.png"
                           }
                           alt=""
                           width="30px"

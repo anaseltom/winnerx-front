@@ -86,6 +86,8 @@ export const users = () => async (dispatch: any) => {
   var user_id;
   if (localStorage.getItem("session_id")) {
     user_id = localStorage.getItem("session_id");
+  } else {
+    return;
   }
   try {
     const userData = {

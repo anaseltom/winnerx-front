@@ -230,5 +230,15 @@
   "ref_not": "الطلب مع معرف المرجع غير موجود",
   "order_exist": "الطلب موجود بالفعل",
   "server_prob": "كانت هناك مشكلة في الخادم الخاص بنا",
-  "not_paid": "لم تدفع ثمن الطلب"
+  "not_paid": "لم تدفع ثمن الطلب",
+  "call_us_footer": "إتصل بنا",
+  "call_us_footer_": "491 68 65 4(0) 971+",
+  "contact_footer": "راسلنا",
+  "contact_footer_": "support@winnerx.com",
+  "location_footer": "عنواننا",
+  "location_footer_": "1504 شوبا سابفاير ، الخليج التجاري ، دبي ، الإمارات العربيةالمتحدة",
+  "location_footer__": "دوام العمل: 8:00 ص - 5:00 م",
+  "footer_2_pay": "طرق الدفع",
+  "footer_3_contact": "تواصل معنا عبر",
+  "back_to_home": "ارجع الى الصفحة الرئيسية"
 }

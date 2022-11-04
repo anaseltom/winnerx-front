@@ -6,11 +6,12 @@ import {
   IonToolbar,
   IonIcon,
 } from "@ionic/react";
+import { arrowBack } from "ionicons/icons";
 import "./Signin.css";
 import { useState, useRef, useEffect } from "react";
 import { userSignIn, userSignUp, usersUpdate } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { RootStore } from "../store";
 import i18n, { t } from "i18next";
@@ -121,12 +122,12 @@ const Signin: React.FC = () => {
 
     const resultSignup = dispatch(userSignUp(signupData, SignupResponse));
   };
-
   const verificationMode = () => {
     // setTimeout(() => {
     //   window.location.href = "/signin";
     // }, 500);
   };
+  const history = useHistory();
 
   const SigninResponse = (res: any) => {
     // console.log("response", res);
@@ -184,9 +185,26 @@ const Signin: React.FC = () => {
               {/* <div className="text-center">
                             <img className="comp_logo" src="assets/img/winnerX-logo.png" alt="wrapkit" />
                         </div> */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: language === "en" ? "flex-start" : "flex-end",
+                }}
+                onClick={() => {
+                  history.push("/");
+                }}
+              >
+                <span>
+                  <IonIcon
+                    icon={arrowBack}
+                    style={{ height: "25px", width: "25px" }}
+                  ></IonIcon>
+                </span>
+                <span>{t("back_to_home")}</span>
+              </div>
               <h2 className="mt-3 text-center">{t("sign_in")}</h2>
               <p className="text-center">{t("email&password")}</p>
-              {console.log(signinMessage)}
+              {/* {console.log(signinMessage)} */}
               {signinMessage?.message && (
                 <h4
                   style={{
@@ -228,7 +246,7 @@ const Signin: React.FC = () => {
                 <div className="col-lg-12">
                   <div className="form-group">
                     <label className="text-dark">{t("password")}</label>
-                    {console.log(login)}
+                    {/* {console.log(login)} */}
                     <input
                       className="form-control password forms_required"
                       id="pwd"
