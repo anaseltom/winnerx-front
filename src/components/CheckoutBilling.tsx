@@ -191,9 +191,12 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
     e.preventDefault();
-    const response = await axios.post("http://localhost:8000/payment_api", {
-      amount: products_cart_total?.total,
-    });
+    const response = await axios.post(
+      "https://winnerx.herokuapp.com/payment_api",
+      {
+        amount: products_cart_total?.total,
+      }
+    );
     console.log(response);
     localStorage.setItem(
       "w-commerce-billing-address",
