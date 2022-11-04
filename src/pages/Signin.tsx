@@ -76,7 +76,7 @@ const Signin: React.FC = () => {
   useEffect(() => {
     // window.location.href = "/signin";
     if (localStorage.getItem("session")) {
-      window.location.href = "/home";
+      window.location.href = "/";
     } else {
     }
   }, []);
@@ -150,7 +150,7 @@ const Signin: React.FC = () => {
       if (ref == "redirect") {
         window.location.href = "/confirm_checkout";
       } else {
-        window.location.href = "/home";
+        window.location.href = "/";
       }
     } else if (res.status == 500) {
       setSigninMessage({
