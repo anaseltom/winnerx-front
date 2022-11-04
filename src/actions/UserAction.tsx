@@ -148,7 +148,7 @@ export const usersProfileUpdate =
     const userUpdate = {
       id: user_id,
       first_name: userData.first_name,
-      last_name: userData.first_name,
+      last_name: userData.last_name,
       email: userData.email,
     };
 
