@@ -106,7 +106,7 @@ const Header: React.FC<any> = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("user_dm");
     setLogged(false);
-    window.location.href = "/home";
+    window.location.href = "/";
   };
   return (
     <>
