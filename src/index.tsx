@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import { HashRouter } from "react-router-dom";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // const { publishableKey } = await axios
@@ -19,7 +20,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   ReactDOM.render(
     <React.StrictMode>
       {/* <Elements stripe={stripePromise}> */}
-      <App />
+      <HashRouter>
+        <App />
+      </HashRouter>
       {/* </Elements> */}
     </React.StrictMode>,
     document.getElementById("root")

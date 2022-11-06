@@ -7,13 +7,16 @@ import {
   IonIcon,
 } from "@ionic/react";
 import "./Signup.css";
+import { arrowBack } from "ionicons/icons";
 import React, { useState } from "react";
 import { userSignUp, usersUpdate } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../store";
 import i18n, { t } from "i18next";
+import { useHistory } from "react-router";
 
 const Signup: React.FC = () => {
+  const history = useHistory();
   const user = useSelector((state: RootStore) => state.user);
   const language = i18n.language;
 
@@ -87,6 +90,24 @@ const Signup: React.FC = () => {
       >
         <div className="auth-box row">
           <div className="signup-box col-lg-8 col-md-8">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: language === "en" ? "flex-start" : "flex-end",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                history.push("/");
+              }}
+            >
+              <span>
+                <IonIcon
+                  icon={arrowBack}
+                  style={{ height: "25px", width: "25px" }}
+                ></IonIcon>
+              </span>
+              <span>{t("back_to_home")}</span>
+            </div>
             <div className="p-3">
               <div className="text-center">
                 <img
@@ -97,7 +118,7 @@ const Signup: React.FC = () => {
               </div>
               <h2 className="mt-3 text-center">{t("sign_up")}</h2>
               <p className="text-center">{t("fill_information")}</p>
-              {signupMessage && (
+              {signupMessage.message && (
                 <h4
                   style={{
                     marginBottom: "10px",

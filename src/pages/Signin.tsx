@@ -189,6 +189,7 @@ const Signin: React.FC = () => {
                 style={{
                   display: "flex",
                   justifyContent: language === "en" ? "flex-start" : "flex-end",
+                  cursor: "pointer",
                 }}
                 onClick={() => {
                   history.push("/");
