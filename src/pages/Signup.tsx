@@ -108,7 +108,7 @@ const Signup: React.FC = () => {
               </span>
               <span>{t("back_to_home")}</span>
             </div>
-            <div className="p-3">
+            <form className="p-3" onSubmit={signupUser}>
               <div className="text-center">
                 <img
                   className="comp_logo"
@@ -233,9 +233,9 @@ const Signup: React.FC = () => {
                 <div className="col-lg-12 text-center">
                   <button
                     type="submit"
-                    onClick={() => {
-                      signupUser();
-                    }}
+                    // onClick={() => {
+                    //   signupUser();
+                    // }}
                     className="btn btn-block btn-dark login_button"
                   >
                     {t("sign_up")}
@@ -248,7 +248,7 @@ const Signup: React.FC = () => {
                   </a>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

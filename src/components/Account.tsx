@@ -182,8 +182,7 @@ const Account: React.FC<any> = ({ feature, title, filterControl }) => {
                                     </tr>
                                 </thead> */}
                 <tbody>
-                  {order_list &&
-                    order_list.length > 0 &&
+                  {order_list && order_list.length > 0 ? (
                     order_list.map((o_ar: any, key: number) => {
                       return (
                         o_ar.order_items &&
@@ -203,7 +202,10 @@ const Account: React.FC<any> = ({ feature, title, filterControl }) => {
                           );
                         })
                       );
-                    })}
+                    })
+                  ) : (
+                    <h1>No orders available</h1>
+                  )}
                 </tbody>
               </table>
             </div>

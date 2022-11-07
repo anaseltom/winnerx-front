@@ -158,17 +158,18 @@ const Winners: React.FC<any> = ({ feature, title, filterControl }) => {
 
             <div className="shoping__cart__table">
               <table>
-                <thead>
-                  <tr>
-                    <th style={{ paddingBottom: "0" }}>{t("entry")}</th>
-                    <th style={{ paddingBottom: "0" }}>{t("refrence")}</th>
-                    <th style={{ paddingBottom: "0" }}>{t("price")}</th>
-                    <th style={{ paddingBottom: "0" }}>{t("date")}</th>
-                  </tr>
-                </thead>
+                {entries && entries.length > 0 && (
+                  <thead>
+                    <tr>
+                      <th style={{ paddingBottom: "0" }}>{t("entry")}</th>
+                      <th style={{ paddingBottom: "0" }}>{t("refrence")}</th>
+                      <th style={{ paddingBottom: "0" }}>{t("price")}</th>
+                      <th style={{ paddingBottom: "0" }}>{t("date")}</th>
+                    </tr>
+                  </thead>
+                )}
                 <tbody>
-                  {entries &&
-                    entries.length > 0 &&
+                  {entries && entries.length > 0 ? (
                     entries.map((ar: any, key: number) => {
                       ++key;
                       return (
@@ -180,7 +181,10 @@ const Winners: React.FC<any> = ({ feature, title, filterControl }) => {
                           date={ar.created_at}
                         />
                       );
-                    })}
+                    })
+                  ) : (
+                    <h1>No Winners yet</h1>
+                  )}
                 </tbody>
               </table>
             </div>

@@ -15,6 +15,7 @@ import { useHistory, useParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { RootStore } from "../store";
 import i18n, { t } from "i18next";
+// import { useIonToast } from "@ionic/react";
 
 declare global {
   interface Window {
@@ -163,9 +164,11 @@ const Signin: React.FC = () => {
     }
   };
 
-  const authentication = () => {
+  const authentication = (e: any) => {
     // console.log("updated ref", ref);
+    e.preventDefault();
     dispatch(userSignIn(login, SigninResponse));
+    // signinMessage.message && presentToast("bottom");
   };
   const [signinMessage, setSigninMessage] = useState<any>({
     status: "500",
@@ -173,6 +176,16 @@ const Signin: React.FC = () => {
     color: "#f8d7da",
   });
 
+  // const [present] = useIonToast();
+  // const presentToast = (position: "top" | "middle" | "bottom") => {
+  //   present({
+  //     message: signinMessage.message,
+  //     duration: 1500,
+  //     position: position,
+  //     icon: checkmark,
+  //     color: signinMessage.meesage ? "success" : "danger",
+  //   });
+  // };
   return (
     <>
       <div
@@ -181,7 +194,7 @@ const Signin: React.FC = () => {
       >
         <div className="auth-box row" style={{ height: "auto" }}>
           <div className="signin-box col-lg-5 col-md-7">
-            <div className="p-3">
+            <form className="p-3" onSubmit={authentication}>
               {/* <div className="text-center">
                             <img className="comp_logo" src="assets/img/winnerX-logo.png" alt="wrapkit" />
                         </div> */}
@@ -266,9 +279,9 @@ const Signin: React.FC = () => {
                 </div>
                 <div className="col-lg-12 text-center">
                   <button
-                    onClick={() => {
-                      authentication();
-                    }}
+                    // onClick={() => {
+                    //   authentication();
+                    // }}
                     type="submit"
                     className="btn btn-block btn-dark login_button"
                   >
@@ -283,7 +296,7 @@ const Signin: React.FC = () => {
                   </a>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

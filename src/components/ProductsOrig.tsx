@@ -238,7 +238,7 @@ const Products: React.FC<any> = ({
                           }}
                           className="details item"
                           style={{
-                            fontSize: language === "ar" ? "18px" : "14px",
+                            fontSize: language === "ar" ? "16px" : "10px",
                             borderRight:
                               language === "en" ? "solid .5px gray" : "",
                             borderLeft:
@@ -250,7 +250,7 @@ const Products: React.FC<any> = ({
                         <div
                           className="price item"
                           style={{
-                            fontSize: "18px",
+                            fontSize: "15px",
                           }}
                         >
                           {ar?.deal_products[0]?.product?.currency_code}{" "}
@@ -271,7 +271,7 @@ const Products: React.FC<any> = ({
                           }}
                           className="button item"
                           style={{
-                            fontSize: language === "ar" ? "18px" : "14px",
+                            fontSize: language === "ar" ? "16px" : "10px",
                             borderRight:
                               language === "ar" ? "solid .5px gray" : "",
                             borderLeft:
