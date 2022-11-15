@@ -60,7 +60,8 @@ const Signup: React.FC = () => {
     }
   };
 
-  const signupUser = () => {
+  const signupUser = (e: any) => {
+    e.preventDefault();
     if (signup.password === signup.confirmPassword) {
       const resultSignup = dispatch(userSignUp(signup, SignupResponse));
     } else {
