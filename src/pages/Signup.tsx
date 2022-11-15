@@ -74,9 +74,15 @@ const Signup: React.FC = () => {
     }
   };
 
-  const verificationMode = () => {
+  const verificationMode = (data: any) => {
+    localStorage.setItem("session", "live");
+    localStorage.setItem("session_id", data.id);
+    localStorage.setItem("email", signup.email);
+    localStorage.setItem("username", signup.username);
+    localStorage.setItem("user_dm", "url(/assets/girl.jpg)");
+    history.push("/");
     setTimeout(() => {
-      window.location.href = "/signin";
+      history.push("/");
     }, 500);
   };
 
@@ -96,6 +102,7 @@ const Signup: React.FC = () => {
                 display: "flex",
                 justifyContent: language === "en" ? "flex-start" : "flex-end",
                 cursor: "pointer",
+                marginTop: "10px",
               }}
               onClick={() => {
                 history.push("/");

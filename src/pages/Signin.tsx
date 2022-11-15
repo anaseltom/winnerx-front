@@ -150,9 +150,9 @@ const Signin: React.FC = () => {
       localStorage.setItem("user_dm", "url(/assets/girl.jpg)");
 
       if (ref == "redirect") {
-        window.location.href = "/confirm_checkout";
+        history.push("/confirm_checkout");
       } else {
-        window.location.href = "/";
+        history.push("/");
       }
     } else if (res.status == 500) {
       setSigninMessage({

@@ -126,7 +126,7 @@ export const usersUpdate =
 
       console.log("hi", data);
       if (data?.status == 200) {
-        verificationMode();
+        verificationMode(userData);
       }
     } catch (e) {
       // dispatch({
