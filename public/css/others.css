@@ -568,8 +568,9 @@
     width: 90vw !important;
   }
 }
+
 @media only screen and (min-width: 980px) {
   .prod_eco .header_text img {
-    width: 30vw !important;
+    width: 25vw !important;
   }
 }
