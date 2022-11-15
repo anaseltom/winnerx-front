@@ -110,11 +110,11 @@ const Signup: React.FC = () => {
             </div>
             <form className="p-3" onSubmit={signupUser}>
               <div className="text-center">
-                <img
+                {/* <img
                   className="comp_logo"
                   src="assets/img/workone-ico.png"
                   alt="wrapkit"
-                />
+                /> */}
               </div>
               <h2 className="mt-3 text-center">{t("sign_up")}</h2>
               <p className="text-center">{t("fill_information")}</p>
@@ -247,6 +247,7 @@ const Signup: React.FC = () => {
                     onClick={() => {
                       history.push("/signin");
                     }}
+                    style={{ cursor: "pointer" }}
                     className="text-danger"
                   >
                     {t("sign_in")}

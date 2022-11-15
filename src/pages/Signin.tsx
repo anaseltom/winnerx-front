@@ -295,6 +295,7 @@ const Signin: React.FC = () => {
                     onClick={() => {
                       history.push("/signup");
                     }}
+                    style={{ cursor: "pointer" }}
                     className="text-danger"
                   >
                     {t("sign_up")}
