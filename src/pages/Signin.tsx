@@ -291,7 +291,12 @@ const Signin: React.FC = () => {
                 <div id="signInDiv" data-width="100%" data-height="200"></div>
                 <div className="col-lg-12 text-center mt-5">
                   {t("no_account")}{" "}
-                  <a href="./signup" className="text-danger">
+                  <a
+                    onClick={() => {
+                      history.push("/signup");
+                    }}
+                    className="text-danger"
+                  >
                     {t("sign_up")}
                   </a>
                 </div>
