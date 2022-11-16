@@ -190,6 +190,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   const handleSubmit = async (e: any) => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
+    setLoader("");
     e.preventDefault();
     const response = await axios.post(
       "https://winnerx.herokuapp.com/payment_api",
@@ -206,8 +207,11 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
 
     const url = response?.data?.data?._links?.payment?.href;
     // console.log(resp);
+    if (url) {
+      window.location.href = url;
+      setLoader("loader_remove");
+    }
     // console.log(response.data);
-    window.open(url, "_self");
     // window.location.replace(url);
     // if(processpay)
     // {
@@ -308,7 +312,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   // console.log(billingAddress);
 
   const paymentSuccess = (intent: any) => {
-    console.log("stripe response", intent);
+    // console.log("stripe response", intent);
     // alert("success payment");
     dispatch(Products_Billing(items, products_cart_total));
   };
@@ -317,6 +321,8 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     alert("Payment unsuccessful, please try again");
   };
 
+  const [loader, setLoader] = useState<any>("loader_remove");
+
   const selectCountry = (value: any) => {
     setBillingAddress({ ...billingAddress, country: value });
   };
@@ -324,9 +330,16 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   const selectRegion = (value: any) => {
     setBillingAddress({ ...billingAddress, city: value });
   };
+  // useEffect(() => {
+  //   setTimeout(function () {}, 500);
+  //   console.log(loader);
+  // }, []);
 
   return (
     <>
+      <div id="preloder" className={loader}>
+        <div className="loader"></div>
+      </div>
       <Header />
       <section
         className="checkout spad"
@@ -457,13 +470,9 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                   <div className="row">
                     <div className="col-lg-6">
                       <div className="checkout__input">
-                        <p>
-                          {t("company")}
-                          <span>*</span>
-                        </p>
+                        <p>{t("company")}</p>
                         <input
                           type="text"
-                          required
                           value={billingAddress.company}
                           onChange={(e) => {
                             setBillingAddress({

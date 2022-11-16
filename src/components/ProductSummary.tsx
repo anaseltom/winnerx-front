@@ -11,7 +11,11 @@ import { checkmark } from "ionicons/icons";
 //   } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Product_Cart, Product_Delete } from "../actions/UserAction";
+import {
+  Product_Cart,
+  Product_Delete,
+  Product_Wishlist,
+} from "../actions/UserAction";
 import { RootStore } from "../store";
 import i18n, { t } from "i18next";
 
@@ -25,9 +29,9 @@ const ProductSummary: React.FC<any> = ({ product }) => {
   };
   const language = i18n.language;
   const [present] = useIonToast();
-  const presentToast = (position: "top" | "middle" | "bottom") => {
+  const presentToast = (position: "top" | "middle" | "bottom", msg: any) => {
     present({
-      message: "Added to cart successfully",
+      message: msg,
       duration: 1500,
       position: position,
       icon: checkmark,
@@ -43,6 +47,42 @@ const ProductSummary: React.FC<any> = ({ product }) => {
     } else if (action == "inc") {
       setProdQty(prodQty + 1);
     }
+  };
+
+  const addToWishlist = (code: any) => {
+    // console.log(code);
+    if (localStorage.getItem("w-commerce-token-widerange")) {
+      var product_value = JSON.parse(
+        localStorage.getItem("w-commerce-token-widerange")!
+      );
+      var prodIndex = product_value?.findIndex((s: any) => {
+        // console.log(s);
+        return s.code === code;
+      });
+      // console.log("index", prodIndex);
+      // console.log(prodIndex);
+      if (prodIndex >= 0) {
+        product_value[prodIndex].qty += 1;
+        localStorage.setItem(
+          "w-commerce-token-widerange",
+          JSON.stringify(product_value)
+        );
+      } else {
+        var temp_value = { code: code, qty: 1 };
+        product_value.push(temp_value);
+        localStorage.setItem(
+          "w-commerce-token-widerange",
+          JSON.stringify(product_value)
+        );
+      }
+    } else {
+      var new_value = [{ code, qty: 1 }];
+      localStorage.setItem(
+        "w-commerce-token-widerange",
+        JSON.stringify(new_value)
+      );
+    }
+    dispatch(Product_Wishlist());
   };
 
   const addToCart = (code: any) => {
@@ -171,7 +211,7 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                 <button
                   onClick={() => {
                     addToCart(product?.product_code);
-                    presentToast("bottom");
+                    presentToast("bottom", "Added to cart successfuly");
                   }}
                   className="primary-btn"
                   style={{
@@ -181,7 +221,14 @@ const ProductSummary: React.FC<any> = ({ product }) => {
                 >
                   {t("add_to_cart")}
                 </button>
-                <a className="heart-icon">
+                <a
+                  className="heart-icon"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    addToWishlist(product?.product_code);
+                    presentToast("bottom", "Added to wishlist successfuly");
+                  }}
+                >
                   <img
                     className="social_media"
                     src="/assets/img/003-like.png"

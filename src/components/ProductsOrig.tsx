@@ -85,15 +85,17 @@ const Products: React.FC<any> = ({
     dispatch(Product_Cart());
   };
 
-  const addToWishlist = (id: any) => {
-    // console.log("hello");
+  const addToWishlist = (code: any) => {
+    // console.log(code);
     if (localStorage.getItem("w-commerce-token-widerange")) {
       var product_value = JSON.parse(
         localStorage.getItem("w-commerce-token-widerange")!
       );
-      var prodIndex = product_value?.findIndex((s: any) => s.id === id);
+      var prodIndex = product_value?.findIndex((s: any) => {
+        // console.log(s);
+        return s.code === code;
+      });
       // console.log("index", prodIndex);
-
       // console.log(prodIndex);
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += 1;
@@ -102,7 +104,7 @@ const Products: React.FC<any> = ({
           JSON.stringify(product_value)
         );
       } else {
-        var temp_value = { id: id, qty: 1 };
+        var temp_value = { code: code, qty: 1 };
         product_value.push(temp_value);
         localStorage.setItem(
           "w-commerce-token-widerange",
@@ -110,7 +112,7 @@ const Products: React.FC<any> = ({
         );
       }
     } else {
-      var new_value = [{ id, qty: 1 }];
+      var new_value = [{ code, qty: 1 }];
       localStorage.setItem(
         "w-commerce-token-widerange",
         JSON.stringify(new_value)
@@ -165,7 +167,7 @@ const Products: React.FC<any> = ({
                   onClick={(e) => {
                     setProdIsOpen(true);
                     setUpdateProdSummary(ar?.deal_products[0]?.product);
-                    addToWishlist(ar.id);
+                    // addToWishlist(ar?.deal_products[0]?.product.product_code);
                   }}
                   key={ar.id}
                   className={`col-lg-6 col-md-12 col-sm-12 mix ${ar.categoryName}`}

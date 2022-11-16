@@ -40,7 +40,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     (state: RootStore) => state.cart_total
   );
   const dispatch = useDispatch();
-
+  // console.log(products_wishlist);
   useEffect(() => {
     // console.log("categories");
     dispatch(Products_list(""));
@@ -72,12 +72,12 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     // console.log(product_value);
   }
 
-  const getProd = (id: any) => {
+  const getProd = (code: any) => {
     var prodIndex = products_list?.findIndex((s: any) => {
-      console.log(s.id);
-      return s.id === id;
+      return s.product_code === code;
     });
     // console.log(prodIndex);
+    // console.log(products_list[prodIndex]);
     return products_list[prodIndex];
   };
 
@@ -124,33 +124,37 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                   width: "100%",
                 }}
               >
-                <table
-                  style={{ width: "100%" }}
-                  dir={language === "ar" ? "rtl" : "ltr"}
-                >
-                  <thead>
-                    <tr>
-                      <th className="shoping__product">{t("products")}</th>
-                      <th>{t("price")}</th>
-                      <th style={{ textAlign: "right" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products_list.length > 0 &&
-                      products_wishlist &&
-                      products_wishlist.length > 0 &&
-                      products_wishlist.map((ar: any, key: number) => {
-                        const prod = getProd(ar.id);
-                        return (
-                          <WishlistSummary
-                            key={key}
-                            product={prod}
-                            qty={ar.qty}
-                          />
-                        );
-                      })}
-                  </tbody>
-                </table>
+                {products_list.length > 0 ? (
+                  <table
+                    style={{ width: "100%" }}
+                    dir={language === "ar" ? "rtl" : "ltr"}
+                  >
+                    <thead>
+                      <tr>
+                        <th className="shoping__product">{t("products")}</th>
+                        <th>{t("price")}</th>
+                        <th style={{ textAlign: "right" }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {products_list.length > 0 &&
+                        products_wishlist &&
+                        products_wishlist.length > 0 &&
+                        products_wishlist.map((ar: any, key: number) => {
+                          const prod = getProd(ar.code);
+                          return (
+                            <WishlistSummary
+                              key={key}
+                              product={prod}
+                              qty={ar.qty}
+                            />
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                ) : (
+                  <h1>{t("empty_wishlist")}</h1>
+                )}
               </div>
             </div>
           </div>
