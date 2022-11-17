@@ -70,6 +70,8 @@ const App: React.FC = () => {
       document.querySelector("html")?.setAttribute("dir", "ltr");
     }
     if (!localStorage.getItem("lang")) {
+      document.querySelector("html")?.setAttribute("dir", "ltr");
+      i18n.changeLanguage("en");
       localStorage.setItem("lang", "en");
     }
   }, []);
