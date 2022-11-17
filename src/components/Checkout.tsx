@@ -118,35 +118,39 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                   width: "100%",
                 }}
               >
-                <table
-                  style={{ width: "100%" }}
-                  dir={language === "ar" ? "rtl" : "ltr"}
-                >
-                  <thead>
-                    <tr>
-                      <th className="shoping__product">{t("products")}</th>
-                      <th>{t("price")}</th>
-                      <th>{t("quantity")}</th>
-                      <th>{t("total")}</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products_list.length > 0 &&
-                      products_cart &&
-                      products_cart.length > 0 &&
-                      products_cart.map((ar: any, key: number) => {
-                        const prod = getProd(ar.code);
-                        return (
-                          <CheckoutSummary
-                            key={key}
-                            product={prod}
-                            qty={ar.qty}
-                          />
-                        );
-                      })}
-                  </tbody>
-                </table>
+                {products_cart.length > 0 ? (
+                  <table
+                    style={{ width: "100%" }}
+                    dir={language === "ar" ? "rtl" : "ltr"}
+                  >
+                    <thead>
+                      <tr>
+                        <th className="shoping__product">{t("products")}</th>
+                        <th>{t("price")}</th>
+                        <th>{t("quantity")}</th>
+                        <th>{t("total")}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {products_list.length > 0 &&
+                        products_cart &&
+                        products_cart.length > 0 &&
+                        products_cart.map((ar: any, key: number) => {
+                          const prod = getProd(ar.code);
+                          return (
+                            <CheckoutSummary
+                              key={key}
+                              product={prod}
+                              qty={ar.qty}
+                            />
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                ) : (
+                  <h1>{t("empty_cart")}</h1>
+                )}
               </div>
             </div>
           </div>
@@ -183,49 +187,51 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
               className="col-lg-6"
               style={{ textAlign: language === "ar" ? "right" : "left" }}
             >
-              <div className="shoping__checkout">
-                <h5>{t("cart_total")}</h5>
-                <ul>
-                  <li>
-                    {t("subtotal")}{" "}
-                    <span
-                      style={{ float: language === "ar" ? "left" : "right" }}
+              {products_cart.length > 0 && (
+                <div className="shoping__checkout">
+                  <h5>{t("cart_total")}</h5>
+                  <ul>
+                    <li>
+                      {t("subtotal")}{" "}
+                      <span
+                        style={{ float: language === "ar" ? "left" : "right" }}
+                      >
+                        {numberWithCommas(products_cart_total?.total)}
+                      </span>
+                    </li>
+                    <li>
+                      {t("total")}{" "}
+                      <span
+                        style={{ float: language === "ar" ? "left" : "right" }}
+                      >
+                        {numberWithCommas(products_cart_total?.total)}
+                      </span>
+                    </li>
+                  </ul>
+                  {products_cart.length > 0 ? (
+                    <Link to={`/confirm_checkout`}>
+                      <button
+                        className="primary-btn checkout_button"
+                        style={{
+                          letterSpacing: language === "ar" ? "0" : "1px",
+                          fontSize: language === "ar" ? "18px" : "16px",
+                        }}
+                      >
+                        {t("proceed_to_checkout")}
+                      </button>
+                    </Link>
+                  ) : (
+                    <Link
+                      onClick={(event) => event.preventDefault()}
+                      to={`/confirm_checkout`}
                     >
-                      {numberWithCommas(products_cart_total?.total)}
-                    </span>
-                  </li>
-                  <li>
-                    {t("total")}{" "}
-                    <span
-                      style={{ float: language === "ar" ? "left" : "right" }}
-                    >
-                      {numberWithCommas(products_cart_total?.total)}
-                    </span>
-                  </li>
-                </ul>
-                {products_cart.length > 0 ? (
-                  <Link to={`/confirm_checkout`}>
-                    <button
-                      className="primary-btn checkout_button"
-                      style={{
-                        letterSpacing: language === "ar" ? "0" : "1px",
-                        fontSize: language === "ar" ? "18px" : "16px",
-                      }}
-                    >
-                      {t("proceed_to_checkout")}
-                    </button>
-                  </Link>
-                ) : (
-                  <Link
-                    onClick={(event) => event.preventDefault()}
-                    to={`/confirm_checkout`}
-                  >
-                    <button className="warning-btn checkout_button">
-                      {t("proceed_to_checkout")}
-                    </button>
-                  </Link>
-                )}
-              </div>
+                      <button className="warning-btn checkout_button">
+                        {t("proceed_to_checkout")}
+                      </button>
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -83,7 +83,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
         <h5>{product?.product_name}</h5>
       </td>
       <td className="shoping__cart__price" align="center">
-        {product?.currencyCode} {numberWithCommas(product?.unitPrice)}
+        {product?.currencyCode} {numberWithCommas(product?.unit_price)}
       </td>
       <td className="shoping__cart__quantity">
         <div className="quantity">
@@ -110,7 +110,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
       </td>
       <td className="shoping__cart__total">
         {product?.currency_code}{" "}
-        {numberWithCommas(prodQty * product?.unitPrice)}
+        {numberWithCommas(prodQty * product?.unit_price)}
       </td>
       <td className="shoping__cart__item__close">
         <img

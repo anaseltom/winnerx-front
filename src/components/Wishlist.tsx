@@ -124,7 +124,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                   width: "100%",
                 }}
               >
-                {products_list.length > 0 ? (
+                {products_wishlist.length > 0 ? (
                   <table
                     style={{ width: "100%" }}
                     dir={language === "ar" ? "rtl" : "ltr"}
@@ -161,7 +161,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
           <div className="row">
             <div className="col-lg-12">
               <div className="shoping__cart__btns">
-                <Link to={`/browse/ref=all`}>
+                <Link to={`/`}>
                   <button
                     className="primary-btn cart-btn"
                     style={{
