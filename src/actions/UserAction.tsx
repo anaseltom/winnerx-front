@@ -492,7 +492,7 @@ export const Products_Refunds =
   };
 
 export const Product_Wishlist = () => async (dispatch: any) => {
-  var product_value = [{}];
+  var product_value = [];
   if (localStorage.getItem("w-commerce-token-widerange")) {
     product_value = JSON.parse(
       localStorage.getItem("w-commerce-token-widerange")!
