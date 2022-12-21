@@ -26,8 +26,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { users } from "../actions/UserAction";
 import { RootStore } from "../store";
 import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 const Home: React.FC = () => {
+  const language = i18n.language;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [loader, setLoader] = useState<any>("");
@@ -57,7 +59,9 @@ const Home: React.FC = () => {
         filterBy=""
       />
 
-      <BannerImage image="Artboard1.png" />
+      <BannerImage
+        image={language == "en" ? "Artboard1.png" : "Artboard2.jpg"}
+      />
 
       {/* <ProductsFeatured
       feature="featured" 

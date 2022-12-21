@@ -5,6 +5,7 @@ import {
   IonTitle,
   IonToolbar,
   IonIcon,
+  IonModal,
 } from "@ionic/react";
 import { arrowBack } from "ionicons/icons";
 import "./Signin.css";
@@ -15,14 +16,16 @@ import { useHistory, useParams } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { RootStore } from "../store";
 import i18n, { t } from "i18next";
+import { baseURL } from "../utilities/axios";
+import axios from "axios";
 // import { useIonToast } from "@ionic/react";
 
-declare global {
-  interface Window {
-    // ⚠️ notice that "Window" is capitalized here
-    google: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     // ⚠️ notice that "Window" is capitalized here
+//     google: any;
+//   }
+// }
 
 const Signin: React.FC = () => {
   function handleCallbackResponse(response: any) {
@@ -34,26 +37,37 @@ const Signin: React.FC = () => {
     }
   }
   useEffect(() => {
-    const google = window?.google;
-    google?.accounts.id.initialize({
-      client_id:
-        "580884249363-g8fr53jtk9me0u8lsu6sgvkh9mr8as0r.apps.googleusercontent.com",
-      callback: handleCallbackResponse,
-    });
-
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "dark",
-      size: "large",
-      width: "100%",
-    });
+    // const google = window?.google;
+    // google?.accounts.id.initialize({
+    //   client_id:
+    //     "580884249363-g8fr53jtk9me0u8lsu6sgvkh9mr8as0r.apps.googleusercontent.com",
+    //   callback: handleCallbackResponse,
+    // });
+    // google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+    //   theme: "dark",
+    //   size: "large",
+    //   width: "100%",
+    // });
   }, []);
   const language = i18n.language;
+  const history = useHistory();
   const handleFailure = (result: any) => {};
 
   const handleLogin = (googleData: any) => {};
 
   const user = useSelector((state: RootStore) => state.user);
   const [ref, setRef] = useState<any>("none");
+
+  const [isOpen, setIsOpen] = useState<any>(false);
+  const [dismiss, setDismiss] = useState<any>(false);
+  const [otp, setOtp] = useState("");
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
+  const [otpMessage, setOtpMessage] = useState({
+    msg: "",
+    color: "",
+  });
+
   const { id } = useParams<any>();
   const [login, setLogin] = useState<any>({
     email: "",
@@ -74,6 +88,66 @@ const Signin: React.FC = () => {
     Child();
   }, [id]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
+  const handleSendOtp = async (e: any) => {
+    e.preventDefault();
+    axios
+      .post(`${baseURL}/user/verify-otp`, { email: login.email, otp: otp })
+      .then((res) => {
+        // console.log(res);
+        if (res.data.status == 200) {
+          setOtpMessage({
+            msg: "Your account has been verified",
+            color: "#d4edda",
+          });
+          // authentication(null);
+          setDismiss(true);
+          setIsOpen(false);
+          setTimeout(() => {
+            dispatch(userSignIn(login, SigninResponse));
+          }, 1000);
+          // history.push("/");
+        } else {
+          setOtpMessage({
+            msg: "Incorrect OTP",
+            color: "#f8d7da",
+          });
+          setTimeout(() => {
+            setIsOpen(false);
+          }, 1000);
+        }
+      })
+      .catch((err) => {
+        setOtpMessage({
+          msg: "Something went wrong",
+          color: "#f8d7da",
+        });
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 1000);
+      });
+  };
+
   // check if signed in or not
   useEffect(() => {
     // window.location.href = "/signin";
@@ -87,7 +161,7 @@ const Signin: React.FC = () => {
 
   // ------------------------
   // This is for the social media login - first we need to register the user
-
+  // console.log(login);
   const SignupResponse = (res: any) => {
     if (res.status == 200) {
       dispatch(usersUpdate(res.id, res.utk, verificationMode));
@@ -128,7 +202,6 @@ const Signin: React.FC = () => {
     //   window.location.href = "/signin";
     // }, 500);
   };
-  const history = useHistory();
 
   const SigninResponse = (res: any) => {
     // console.log("response", res);
@@ -161,6 +234,18 @@ const Signin: React.FC = () => {
         message: res.msg,
         color: "#f8d7da",
       });
+      if (
+        res.msg ==
+        "We sent you an email verification to your email, please read the instruction on how to verify your email."
+      ) {
+        axios
+          .post(`${baseURL}/user/send-otp`, { email: login.email })
+          .then((res) => {
+            setIsOpen(true);
+            setMinutes(1);
+            setSeconds(30);
+          });
+      }
     }
   };
 
@@ -176,6 +261,15 @@ const Signin: React.FC = () => {
     color: "#f8d7da",
   });
 
+  const resendOTP = () => {
+    axios
+      .post(`${baseURL}/user/send-otp`, { email: login.email })
+      .then((res) => {
+        setIsOpen(true);
+        setMinutes(1);
+        setSeconds(30);
+      });
+  };
   // const [present] = useIonToast();
   // const presentToast = (position: "top" | "middle" | "bottom") => {
   //   present({
@@ -283,12 +377,12 @@ const Signin: React.FC = () => {
                     //   authentication();
                     // }}
                     type="submit"
-                    className="btn btn-block btn-dark login_button"
+                    className="primary-btn"
                   >
                     {t("sign_in")}
                   </button>
                 </div>
-                <div id="signInDiv" data-width="100%" data-height="200"></div>
+                {/* <div id="signInDiv" data-width="100%" data-height="200"></div> */}
                 <div className="col-lg-12 text-center mt-5">
                   {t("no_account")}{" "}
                   <a
@@ -306,6 +400,74 @@ const Signin: React.FC = () => {
           </div>
         </div>
       </div>
+      <IonModal
+        isOpen={isOpen}
+        canDismiss={dismiss}
+        style={{ padding: "0 15px" }}
+      >
+        <IonHeader>
+          <IonToolbar color={"dark"} style={{ textAlign: "center" }}>
+            <IonTitle>{t("otp_verification")}</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <div style={{ padding: "0 15px" }}>
+          <h3 style={{ background: otpMessage.color, padding: "10px 5px" }}>
+            {otpMessage.msg}
+          </h3>
+          <h2>({t("check_junk")})</h2>
+          <div
+            className="col-lg-12"
+            style={{ padding: "0", marginTop: "25px" }}
+          >
+            <div className="form-group">
+              <label className="text-dark">OTP</label>
+              {/* {console.log(login)} */}
+              <input
+                className="form-control password forms_required"
+                id="pwd"
+                onChange={(e) => {
+                  setOtp(e.target.value);
+                }}
+                type="text"
+                placeholder={language === "en" ? "enter OTP" : "أدخل ال OTP"}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "25px",
+            }}
+          >
+            {/* <h3>Hello</h3> */}
+            {seconds > 0 || minutes > 0 ? (
+              <p>
+                {t("time_remain")}: {minutes < 10 ? `0${minutes}` : minutes}:
+                {seconds < 10 ? `0${seconds}` : seconds}
+              </p>
+            ) : (
+              <p>{t("no_code")}</p>
+            )}
+            <button
+              disabled={seconds > 0 || minutes > 0}
+              style={{
+                color: seconds > 0 || minutes > 0 ? "#DFE3E8" : "#dcb841",
+                height: "36px",
+              }}
+              onClick={resendOTP}
+            >
+              {t("resend_otp")}
+            </button>
+          </div>
+          <div style={{ textAlign: "center", marginTop: "120px" }}>
+            <button className="primary-btn" onClick={handleSendOtp}>
+              {t("submit")}
+            </button>
+          </div>
+        </div>
+      </IonModal>
     </>
   );
 };

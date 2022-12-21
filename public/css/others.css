@@ -8,6 +8,37 @@
   /* background: #dcb841; */
 }
 
+/* anas */
+ion-select {
+  --placeholder-color: #d7b138;
+  --placeholder-opacity: 1;
+  width: 100%;
+  justify-content: center;
+  /* background-color: #000; */
+}
+.action-sheet-group .sc-ion-action-sheet-md {
+  background-color: #000;
+}
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  flex: 0 0 auto;
+  /* background-color: #000; */
+}
+
+ion-select::part(text) {
+  color: #d7b138;
+  /* background-color: #000; */
+}
+
+ion-select::part(icon) {
+  color: #d7b138;
+  /* background-color: #000; */
+  opacity: 1;
+}
+
+/* anas end */
+
 .prod_orig .featured__item {
   background-repeat: no-repeat;
   background-position: 50% 20%;

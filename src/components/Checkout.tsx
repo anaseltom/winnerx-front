@@ -15,13 +15,14 @@ import {
   Route,
   Link,
   useParams,
+  useHistory,
 } from "react-router-dom";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import CheckoutSummary from "../components/CheckoutSummary";
 import Footer from "../components/Footer";
 import { useState, useRef, useEffect } from "react";
-import { Products_list } from "../actions/UserAction";
+import { openSigninModal, Products_list } from "../actions/UserAction";
 import { Product_Cart, Product_Cart_Total } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootStore } from "../store";
@@ -34,14 +35,29 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_cart_total = useSelector(
     (state: RootStore) => state.cart_total
   );
+  const [logged, setLogged] = useState<any>({
+    isLogged: false,
+  });
+  const history = useHistory();
+
   const dispatch = useDispatch();
   // console.log(products_list);
   // console.log(products_cart);
   const { t } = useTranslation();
   const language = i18n.language;
 
+  const loggedChecker = () => {
+    if (localStorage.getItem("session_id")) {
+      setLogged({ isLogged: true });
+    } else {
+      setLogged({ isLogged: false });
+    }
+    // console.log("logged is", logged);
+  };
+
   useEffect(() => {
     dispatch(Products_list(""));
+    loggedChecker();
   }, []);
 
   useEffect(() => {
@@ -64,10 +80,8 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     );
   }
 
-  const getProd = (code: any) => {
-    var prodIndex = products_list?.findIndex(
-      (s: any) => s.product_code === code
-    );
+  const getProd = (id: any) => {
+    var prodIndex = products_list?.findIndex((s: any) => s.id === id);
     return products_list[prodIndex];
   };
 
@@ -137,7 +151,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                         products_cart &&
                         products_cart.length > 0 &&
                         products_cart.map((ar: any, key: number) => {
-                          const prod = getProd(ar.code);
+                          const prod = getProd(ar.id);
                           return (
                             <CheckoutSummary
                               key={key}
@@ -209,7 +223,14 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                     </li>
                   </ul>
                   {products_cart.length > 0 ? (
-                    <Link to={`/confirm_checkout`}>
+                    <div
+                      onClick={() => {
+                        loggedChecker();
+                        logged.isLogged != true
+                          ? dispatch(openSigninModal())
+                          : history.push("/confirm_checkout");
+                      }}
+                    >
                       <button
                         className="primary-btn checkout_button"
                         style={{
@@ -219,7 +240,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                       >
                         {t("proceed_to_checkout")}
                       </button>
-                    </Link>
+                    </div>
                   ) : (
                     <Link
                       onClick={(event) => event.preventDefault()}

@@ -68,7 +68,7 @@ const Footer: React.FC<any> = () => {
       <div className="footer_2_div_copy">
         <div className="footer_div_copy_" style={{ padding: "20px 0" }}>
           <div className="footer_2_div_copy__" style={{ marginTop: "0" }}>
-            <h6>{t("useful_links")}</h6>
+            <h4>{t("useful_links")}</h4>
             <ul>
               <li>
                 <Link to={`/how-it-works`}>{t("how_it_works")}</Link>

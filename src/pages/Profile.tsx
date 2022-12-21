@@ -34,6 +34,7 @@ import {
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
+import { apiUrl } from "../utilities/axios";
 
 const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
   const products_list = useSelector((state: RootStore) => state.products_list);
@@ -45,9 +46,9 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
   );
   const { t } = useTranslation();
   const [present] = useIonToast();
-  const presentToast = (position: "top" | "middle" | "bottom") => {
+  const presentToast = (position: "top" | "middle" | "bottom", msg: any) => {
     present({
-      message: "Profile image updated successfully",
+      message: msg,
       duration: 1500,
       position: position,
       icon: checkmark,
@@ -66,14 +67,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
     orderNotes: "",
   });
   const language = i18n.language;
-  const [updateMessage, setUpdateMessage] = useState<any>("Saved Succesfully");
+  const [updateMessage, setUpdateMessage] = useState<any>("");
   const [selectedFile, setSelectedFile] = useState<any>(null);
 
   useEffect(() => {
     dispatch(users());
   }, []);
-  const successMessage = document.querySelector("#success-message");
-  successMessage && document.querySelector("html")?.append(successMessage);
 
   const [userDetails, setUserDetails] = useState<any>({
     first_name: userProfile?.first_name ? userProfile?.first_name : "",
@@ -161,12 +160,12 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
       const fd = new FormData();
       fd.append("image", file, file.name);
       const resp = await axios.post(
-        `https://winnerx.herokuapp.com/upload/profile/${userProfile?.id}`,
+        `${apiUrl}/upload/profile/${userProfile?.customer?.id}`,
         fd
       );
       if (resp.status === 200) {
         dispatch(users());
-        presentToast("bottom");
+        presentToast("bottom", "Updated profile picture successfully");
       }
     }
   };
@@ -225,7 +224,7 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                 }}
               >
                 <img
-                  src={userDetails.profile}
+                  src={userDetails.profile || "/assets/img/user-p.png"}
                   className="mx-auto img-fluid img-thumbnail"
                   style={{
                     width: "180px",
@@ -441,17 +440,29 @@ const Profile: React.FC<any> = ({ feature, title, filterControl }) => {
                   </div>
                 </div>
               </div>
-
-              <button
-                type="submit"
-                className="site-btn"
-                style={{ fontSize: language === "ar" ? "18px" : "16px" }}
-                onClick={() => {
-                  submitEditProfile();
-                }}
-              >
-                {t("save")}
-              </button>
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <button
+                  type="submit"
+                  className="primary-btn"
+                  style={{
+                    fontSize: language === "ar" ? "18px" : "16px",
+                    margin: "0 auto",
+                    width: "50%",
+                  }}
+                  onClick={() => {
+                    submitEditProfile();
+                  }}
+                >
+                  {t("save")}
+                </button>
+              </div>
+              <h1>
+                {updateMessage &&
+                  presentToast(
+                    "bottom",
+                    "Profile has been updated successfully"
+                  )}
+              </h1>
             </div>
           </div>
         </div>

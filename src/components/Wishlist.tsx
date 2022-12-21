@@ -72,9 +72,9 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
     // console.log(product_value);
   }
 
-  const getProd = (code: any) => {
+  const getProd = (id: any) => {
     var prodIndex = products_list?.findIndex((s: any) => {
-      return s.product_code === code;
+      return s.id === id;
     });
     // console.log(prodIndex);
     // console.log(products_list[prodIndex]);
@@ -141,7 +141,7 @@ const Checkout: React.FC<any> = ({ feature, title, filterControl }) => {
                         products_wishlist &&
                         products_wishlist.length > 0 &&
                         products_wishlist.map((ar: any, key: number) => {
-                          const prod = getProd(ar.code);
+                          const prod = getProd(ar.id);
                           return (
                             <WishlistSummary
                               key={key}

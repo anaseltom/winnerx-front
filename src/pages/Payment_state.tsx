@@ -20,6 +20,7 @@ import { SpinnerDotted } from "spinners-react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
+import { apiUrl } from "../utilities/axios";
 
 const PaymentState: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const PaymentState: React.FC = () => {
 
   const checkPayment = async () => {
     axios
-      .post("https://winnerx.herokuapp.com/check_payment", {
+      .post(`${apiUrl}/check_payment`, {
         ref,
       })
       .then(async (response) => {
@@ -63,7 +64,7 @@ const PaymentState: React.FC = () => {
 
   const getOrderArray = async () => {
     let array = products_cart?.map((ar: any, key: number) => {
-      const prod = getProd(ar.code);
+      const prod = getProd(ar.id);
       // console.log(prod);
       return {
         product_id: prod.id,
@@ -83,7 +84,7 @@ const PaymentState: React.FC = () => {
 
     if (array.length > 0) {
       axios
-        .post("https://winnerx.herokuapp.com/api/v1/orders/update", {
+        .post(`${apiUrl}/api/v1/orders/update`, {
           id: 0,
           customer_id: userProfile.id,
           status: "active",
@@ -106,10 +107,8 @@ const PaymentState: React.FC = () => {
         });
     }
   };
-  const getProd = (code: any) => {
-    var prodIndex = products_list?.findIndex(
-      (s: any) => s.product_code === code
-    );
+  const getProd = (id: any) => {
+    var prodIndex = products_list?.findIndex((s: any) => s.id === id);
     return products_list[prodIndex];
   };
 

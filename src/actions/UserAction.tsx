@@ -15,10 +15,23 @@ import {
   PRODUCT_WISHLIST_DELETE,
   WINNERS,
   ENTRIES,
+  BILLING_ADDRESSES,
+  USER_ADDRESSES,
+  TOGGLE_MODAL,
 } from "./types";
 
 import axios from "axios";
 import axiosInstance from "../utilities/axios";
+
+export const updateProfileImage =
+  (id: any, formData: any) => async (dispatch: any) => {
+    try {
+      const resp = await axios.post(
+        `https://winnerx.herokuapp.com/upload/profile/${id}`,
+        formData
+      );
+    } catch (error) {}
+  };
 
 export const userSignIn =
   (userData: any, SigninResponse: any) => async (dispatch: any) => {
@@ -49,15 +62,53 @@ export const userSignIn =
       });
     }
   };
+export const openSigninModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+  };
+};
 
 export const userSignUp =
   (userData: any, SignupResponse: any) => async (dispatch: any) => {
     try {
-      console.log("UserData" + JSON.stringify(userData));
+      // console.log("UserData" + JSON.stringify(userData));
 
       const { data } = await axiosInstance.post("user/signup", userData);
 
       SignupResponse(data);
+
+      // const data = {
+      //   email: "asdf@gmail.com",
+      //   firstname: "asdf",
+      //   lastname: "xyz",
+      //   isLogged: "true"
+      // }
+
+      // dispatch({
+      //   type: USER_SIGNUP,
+      //   payload: data,
+      // });
+    } catch (e) {
+      // dispatch({
+      //   type: USER_SIGNUP,
+      //   payload: {
+      //     status: 500,
+      //     msg: "Something went wrong while fetching tracks.",
+      //     items: [],
+      //   },
+      // });
+    }
+  };
+export const sendPhoneOTPVerifcation =
+  (phone: any, sendOTPResponse: any) => async (dispatch: any) => {
+    try {
+      // console.log("UserData" + JSON.stringify(userData));
+
+      const { data } = await axiosInstance.post("phone/send-otp", {
+        phone: `+${phone}`,
+      });
+      // console.log("ACTION", data);
+      sendOTPResponse(data);
 
       // const data = {
       //   email: "asdf@gmail.com",
@@ -120,11 +171,11 @@ export const usersUpdate =
         id: id,
         session: utk,
       };
-      console.log("userData", userData);
+      // console.log("userData", userData);
 
       const { data } = await axiosInstance.post("users/update", userData);
 
-      console.log("hi", data);
+      // console.log("hi", data);
       if (data?.status == 200) {
         verificationMode(userData);
       }
@@ -206,6 +257,57 @@ export const ProductCategories = () => async (dispatch: any) => {
       dispatch({
         type: PRODUCT_CATEGORIES,
         payload: data.categories,
+      });
+    }
+  } catch (e) {
+    // dispatch({
+    //   type: USER_INFO,
+    //   payload: {
+    //     status: 500,
+    //     msg: "Something went wrong while fetching tracks.",
+    //     items: [],
+    //   },
+    // });
+  }
+};
+
+export const BillingAddresses = () => async (dispatch: any) => {
+  try {
+    const customer_id = localStorage.getItem("session_id");
+    const { data } = await axiosInstance.post("billing_addresses/fetch-all", {
+      customer_id,
+    });
+
+    // console.log("hi", data);
+    if (data && data.billing_addresses) {
+      dispatch({
+        type: BILLING_ADDRESSES,
+        payload: data.billing_addresses,
+      });
+    }
+  } catch (e) {
+    // dispatch({
+    //   type: USER_INFO,
+    //   payload: {
+    //     status: 500,
+    //     msg: "Something went wrong while fetching tracks.",
+    //     items: [],
+    //   },
+    // });
+  }
+};
+export const UserAddresses = () => async (dispatch: any) => {
+  try {
+    const customer_id = localStorage.getItem("session_id");
+    const { data } = await axiosInstance.post("user_addresses/fetch-all", {
+      customer_id,
+    });
+
+    // console.log("hi", data);
+    if (data && data.shipping_addresses) {
+      dispatch({
+        type: USER_ADDRESSES,
+        payload: data.shipping_addresses,
       });
     }
   } catch (e) {
@@ -351,9 +453,7 @@ export const Product_Cart_Total =
         products_cart &&
         products_cart.length > 0 &&
         products_cart.map((ar: any, key: number) => {
-          var index = products_list?.findIndex(
-            (s: any) => s.product_code === ar.code
-          );
+          var index = products_list?.findIndex((s: any) => s.id === ar.id);
           var price = products_list[index].unit_price;
           var qty = ar.qty;
 
@@ -448,7 +548,7 @@ export const Products_Billing =
     try {
       const { data } = await axiosInstance.post("orders/update", tempData);
 
-      console.log("result of order", data);
+      // console.log("result of order", data);
 
       if (data?.status == 200) {
         localStorage.removeItem("w-commerce-token-qerfdswe");

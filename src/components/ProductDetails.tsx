@@ -21,6 +21,7 @@ const ProductDetails: React.FC<any> = ({
   prodIsOpen,
   setProdIsOpen,
   product,
+  deal,
 }) => {
   const location = useLocation();
   const history = useHistory();
@@ -54,7 +55,7 @@ const ProductDetails: React.FC<any> = ({
         </div>
       </section>
 
-      <ProductSummary product={product} />
+      <ProductSummary product={product} deal={deal} />
     </IonModal>
   );
 };

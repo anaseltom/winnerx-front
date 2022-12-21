@@ -50,6 +50,10 @@ h6 {
   font-family: "Cairo", sans-serif;
 }
 
+[aria-checked="true"].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md {
+  color: "black";
+}
+
 h1 {
   font-size: 70px;
 }
@@ -164,10 +168,11 @@ ol {
   display: inline-block;
   font-size: 14px;
   padding: 10px 28px 10px;
-  color: #ffffff;
+  color: #dcb841;
+  background: #000;
+  font-family: "Courier New", Courier, monospace;
   text-transform: uppercase;
   font-weight: 700;
-  background: #dcb841;
   letter-spacing: 2px;
 }
 
@@ -480,7 +485,7 @@ ol {
 
 .header__menu ul li a {
   font-size: 14px;
-  color: #252525;
+  color: #fff;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 2px;
@@ -1992,9 +1997,9 @@ ol {
 }
 
 .primary-btn.cart-btn {
-  color: #6f6f6f;
   padding: 14px 30px 12px;
-  background: #f5f5f5;
+  color: #dcb841;
+  background: #000;
 }
 
 .primary-btn.cart-btn span {
@@ -2073,15 +2078,45 @@ ol {
   margin-bottom: 0;
 }
 
+.search-box {
+  background-color: white;
+}
+
 .shoping__checkout ul li span {
   font-size: 18px;
-  color: #dd2222;
+  color: #1e1e1e;
   float: right;
 }
 
 .shoping__checkout .primary-btn {
   display: block;
   text-align: center;
+}
+
+.product-deal-tab {
+  background-color: #3f3f3f;
+  color: #dcb841;
+  font-family: "Courier New", Courier, monospace;
+  padding: 14px 30px 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.product-deal-tab-active {
+  background-color: #dcb841;
+  color: #fff;
+  padding: 14px 30px 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+.product-deal-tab-active:hover {
+  transition: 500ms;
+}
+.product-deal-tab:hover {
+  background-color: #1e1e1e;
+  color: #dcb841;
+  transition: 500ms;
 }
 
 /*---------------------
@@ -2145,7 +2180,7 @@ ol {
   border: 1px solid #ebebeb;
   padding-left: 20px;
   font-size: 16px;
-  color: #b2b2b2;
+  color: #1c1c1c;
   border-radius: 4px;
   background: #f8f8f8;
 }
@@ -2292,7 +2327,7 @@ ol {
 
 .checkout__order .checkout__order__total span {
   float: right;
-  color: #dd2222;
+  color: #1e1e1e;
 }
 
 .checkout__order button {
@@ -2792,7 +2827,7 @@ ol {
   flex-direction: row;
   justify-content: space-evenly;
   margin-bottom: 20px;
-  background: #f2f3f5;
+  background: #e8e8e8;
   margin: 0 20px 10px 20px;
   border-radius: 10px;
   width: 100%;
@@ -2803,10 +2838,20 @@ ol {
   text-align: center;
   padding: 10px;
 }
+.footer_2_div_copy__ {
+  width: 100%;
+}
 
 .footer_2_div_copy__ > ul > li {
   list-style: none;
   margin-top: 0;
+}
+
+.footer_2_div_copy__ > ul > li:hover {
+  background-color: #dcb841;
+}
+.footer_2_div_copy__ > div > ion-icon:hover {
+  background-color: #dcb841;
 }
 
 .footer_2_div_copy__ > ul {
@@ -2989,6 +3034,7 @@ ol {
   display: flex;
   flex-direction: column;
   width: 100%;
+  align-items: center;
 }
 @media only screen and (min-width: 1200px) {
   .container {

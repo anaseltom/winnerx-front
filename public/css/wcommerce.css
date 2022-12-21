@@ -35,7 +35,7 @@ header {
 }
 
 header ul li a {
-  color: white !important;
+  color: white;
 }
 
 body {
@@ -62,6 +62,11 @@ ion-router-outlet {
 #ion-react-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+div .item-native {
+  background: white;
+  color: "red";
 }
 
 .hero {
@@ -427,7 +432,6 @@ ion-router-outlet {
 }
 
 .checkout_button {
-  color: white !important;
   --ion-color-primary: white;
   box-sizing: border-box;
   padding: 14px 30px 12px;

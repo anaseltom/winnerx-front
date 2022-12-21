@@ -7,6 +7,19 @@ import {
   IonRouterOutlet,
   IonApp,
   IonTabButton,
+  IonItem,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonCheckbox,
+  IonLabel,
+  IonRadio,
+  IonRadioGroup,
+  IonContent,
+  IonItemDivider,
+  IonListHeader,
+  IonIcon,
+  useIonToast,
 } from "@ionic/react";
 import {
   BrowserRouter as Router,
@@ -27,6 +40,7 @@ import {
   Product_Cart_Total,
   Products_Billing,
   users,
+  UserAddresses,
 } from "../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -48,17 +62,39 @@ import StatusMessages, { useMessages } from "./StatusMessages";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
+import { add, addOutline, checkmark, close } from "ionicons/icons";
+import { apiUrl } from "../utilities/axios";
 
 const country = "AE";
 
 const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   const { t } = useTranslation();
+  const [present] = useIonToast();
+  const presentToast = (
+    position: "top" | "middle" | "bottom",
+    msg: any,
+    color: any,
+    icon: any
+  ) => {
+    present({
+      message: msg,
+      duration: 1500,
+      position: position,
+      icon,
+      color,
+    });
+  };
+
   const language = i18n.language;
   const products_list = useSelector((state: RootStore) => state.products_list);
   const products_cart = useSelector((state: RootStore) => state.cart);
   const products_cart_total = useSelector(
     (state: RootStore) => state.cart_total
   );
+  // console.log(products_cart);
+  const billing = useSelector((state: RootStore) => state.user_addresses);
+  // console.log(billing);
+  const userProfile = useSelector((state: RootStore) => state.user);
   // console.log(products_cart_total);
   const user = useSelector((state: RootStore) => state.user);
   const dispatch = useDispatch();
@@ -71,13 +107,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   //   cvv: "",
   // });
   const [processpay, setProcessPay] = useState<any>(false);
-  const [billingAddress, setBillingAddress] = useState<any>({
-    country: "",
-    city: "",
-    address: "",
-    mobile_no: "",
-    company: "",
-  });
+  const [billingAddress, setBillingAddress] = useState<any>({});
 
   // useEffect(() => {
   //   if(!localStorage.getItem('session_id')) {
@@ -94,7 +124,8 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   }, []);
 
   useEffect(() => {
-    console.log("categories");
+    // console.log("categories");
+    dispatch(UserAddresses());
     dispatch(Products_list(""));
   }, []);
 
@@ -117,13 +148,6 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     );
   }
 
-  const getProd = (code: any) => {
-    var prodIndex = products_list?.findIndex(
-      (s: any) => s.productCode === code
-    );
-    return products_list[prodIndex];
-  };
-
   useEffect(() => {
     dispatch(Product_Cart_Total(products_list, products_cart));
   }, [products_list]);
@@ -139,6 +163,9 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [currency, setCurrencty] = useState<string>("aed");
   const [messages, addMessage] = useMessages();
+  const [paymentType, setPaymenetType] = useState<string>("pay with card");
+  const [addLocation, setAddLocation] = useState<boolean>(false);
+  const [success, setSuccess] = useState<number>(0);
 
   const inputStyle = {
     iconColor: "#c4f0ff",
@@ -165,7 +192,7 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
       products_cart &&
       products_cart.length > 0 &&
       products_cart.map((ar: any, key: number) => {
-        const prod = getProd(ar.code);
+        const prod = getProd(ar.id);
         tempData = [
           ...tempData,
           {
@@ -187,30 +214,90 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
 
   // const handleSubmit = async (e: any) => {}
   // console.log(productsBilling);
+  const getOrderArray = async () => {
+    let array = products_cart?.map((ar: any, key: number) => {
+      const prod = getProd(ar.id);
+      // console.log(ar.deal_id);
+      return {
+        product_id: prod.id,
+        quantity: ar.qty,
+        price: prod.unit_price,
+        deal_id: ar.deal_id || prod.deal_products[0].deal_id,
+      };
+    });
+    return array;
+    // history.push("/");
+  };
+
+  const createOrder = (array: any) => {
+    if (array.length > 0) {
+      axios
+        .post(`${apiUrl}/api/v1/orders/update`, {
+          id: 0,
+          customer_id: userProfile.id,
+          status: "active",
+          items: array,
+          payment_status: "unpaid",
+          payment_type: "cash on delivery",
+          billingAddress,
+          user_addresses: { ...billingAddress, customer_id: userProfile.id },
+        })
+        .then((res) => {
+          setSuccess(1);
+          localStorage.setItem("w-commerce-token-qerfdswe", JSON.stringify([]));
+          // setTimeout(() => {
+          //   history.push("/");
+          // }, 5000);
+        })
+        .catch((err) => {
+          return setSuccess(2);
+        });
+    }
+  };
+
+  const getProd = (id: any) => {
+    var prodIndex = products_list?.findIndex((s: any) => s.id === id);
+    return products_list[prodIndex];
+  };
   const handleSubmit = async (e: any) => {
     // We don't want to let default form submission happen here,
-    // which would refresh the page.
-    setLoader("");
     e.preventDefault();
-    const response = await axios.post(
-      "https://winnerx.herokuapp.com/payment_api",
-      {
-        amount: products_cart_total?.total,
-      }
-    );
-    console.log(response);
-    localStorage.setItem(
-      "w-commerce-billing-address",
-      JSON.stringify(billingAddress)
-    );
-    setBillingAddress({});
+    // which would refresh the page.
+    if (products_cart.length > 0) {
+      if (billingAddress?.country && billingAddress?.city) {
+        if (paymentType !== "cash on delivery") {
+          setLoader("");
+          const response = await axios.post(`${apiUrl}/payment_api`, {
+            amount: products_cart_total?.total,
+          });
+          localStorage.setItem(
+            "w-commerce-billing-address",
+            JSON.stringify(billingAddress)
+          );
+          setBillingAddress({});
 
-    const url = response?.data?.data?._links?.payment?.href;
-    // console.log(resp);
-    if (url) {
-      window.location.href = url;
-      setLoader("loader_remove");
+          const url = response?.data?.data?._links?.payment?.href;
+          // console.log(resp);
+          if (url) {
+            window.location.href = url;
+            setLoader("loader_remove");
+          }
+        } else {
+          const newArray = await getOrderArray();
+          createOrder(newArray);
+        }
+      } else {
+        presentToast(
+          "bottom",
+          "Please fill the shipping address",
+          "danger",
+          close
+        );
+      }
+    } else {
+      presentToast("bottom", "No products in cart", "danger", close);
     }
+
     // console.log(response.data);
     // window.location.replace(url);
     // if(processpay)
@@ -309,7 +396,6 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
     //   paymentSuccess(paymentIntent);
     // }
   };
-  // console.log(billingAddress);
 
   const paymentSuccess = (intent: any) => {
     // console.log("stripe response", intent);
@@ -351,6 +437,52 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
             <form id="payment-form" onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-lg-6 col-md-6">
+                  <p>{t("delivery")} </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    {billing.length > 0 && (
+                      <>
+                        <IonList style={{ borderRadius: "20px", width: "80%" }}>
+                          <IonItem>
+                            <IonSelect
+                              placeholder={t("delivery_location")}
+                              interface="action-sheet"
+                              onIonChange={(e) => {
+                                setBillingAddress(e.detail.value);
+                              }}
+                            >
+                              {billing.length > 0 &&
+                                billing.map((val: any, idx: any) => (
+                                  <IonSelectOption key={idx} value={val}>
+                                    {val.address}
+                                  </IonSelectOption>
+                                ))}
+                            </IonSelect>
+                          </IonItem>
+                        </IonList>
+                        <button
+                          style={{
+                            height: "55%",
+                            margin: "auto 0",
+                            color: "#dcb841",
+                            background: "#000",
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setAddLocation(true);
+                          }}
+                        >
+                          <IonIcon icon={add} size="large"></IonIcon>
+                        </button>
+                      </>
+                    )}
+                  </div>
                   {/* <div className="checkout__input">
                     <p>
                       Credit Card # 16digits:<span>*</span>
@@ -396,94 +528,101 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                                         </div>
                                     </div>
                                 </div> */}
-                  <p>{t("delivery")} </p>
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>
-                          {t("complete_add")} <span>*</span>
-                        </p>
-                        <input
-                          type="text"
-                          required
-                          name="address"
-                          onChange={(e) => {
-                            setBillingAddress({
-                              ...billingAddress,
-                              address: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>
-                          {t("mobile")}
-                          <span>*</span>
-                        </p>
-                        <input
-                          type="number"
-                          required
-                          value={billingAddress.mobile_no}
-                          onChange={(e) => {
-                            setBillingAddress({
-                              ...billingAddress,
-                              mobile_no: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>
-                          {t("country")}
-                          <span>*</span>
-                        </p>
-                        {/* <input type="text" /> */}
-                        <CountryDropdown
-                          value={billingAddress.country}
-                          onChange={(val) => selectCountry(val)}
-                        />
+                  {(addLocation || billing.length < 1) && (
+                    <>
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <div className="checkout__input">
+                            <p>
+                              {t("complete_add")} <span>*</span>
+                            </p>
+                            <input
+                              type="text"
+                              required
+                              name="address"
+                              onChange={(e) => {
+                                setBillingAddress({
+                                  ...billingAddress,
+                                  address: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6">
+                          <div className="checkout__input">
+                            <p>
+                              {t("mobile")}
+                              <span>*</span>
+                            </p>
+                            <input
+                              type="number"
+                              required
+                              value={billingAddress.mobile_no}
+                              onChange={(e) => {
+                                setBillingAddress({
+                                  ...billingAddress,
+                                  mobile_no: e.target.value,
+                                  new: true,
+                                  id: 0,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>
-                          {t("city")}
-                          <span>*</span>
-                        </p>
-                        {/* <input type="text" /> */}
-                        <RegionDropdown
-                          country={billingAddress.country}
-                          value={billingAddress.city}
-                          onChange={(val) => selectRegion(val)}
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="row">
-                    <div className="col-lg-6">
-                      <div className="checkout__input">
-                        <p>{t("company")}</p>
-                        <input
-                          type="text"
-                          value={billingAddress.company}
-                          onChange={(e) => {
-                            setBillingAddress({
-                              ...billingAddress,
-                              company: e.target.value,
-                            });
-                          }}
-                        />
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <div className="checkout__input">
+                            <p>
+                              {t("country")}
+                              <span>*</span>
+                            </p>
+                            {/* <input type="text" /> */}
+                            <CountryDropdown
+                              value={billingAddress.country}
+                              onChange={(val) => selectCountry(val)}
+                              whitelist={["AE", "BH", "KW", "OM", "QA", "SA"]}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-lg-6">
+                          <div className="checkout__input">
+                            <p>
+                              {t("city")}
+                              <span>*</span>
+                            </p>
+                            {/* <input type="text" /> */}
+                            <RegionDropdown
+                              country={billingAddress.country}
+                              value={billingAddress.city}
+                              onChange={(val) => selectRegion(val)}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                      <div className="row">
+                        <div className="col-lg-6">
+                          <div className="checkout__input">
+                            <p>{t("company")}</p>
+                            <input
+                              type="text"
+                              value={billingAddress.company}
+                              onChange={(e) => {
+                                setBillingAddress({
+                                  ...billingAddress,
+                                  company: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   {/* <div className="checkout__input__checkbox">
                                     <label>
                                         Ship to a different address?
@@ -502,6 +641,39 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                   </div> */}
                 </div>
                 <div className="col-lg-6 col-md-6">
+                  <h3
+                    style={{
+                      background: "#f5f5f5",
+                      margin: "0",
+                      padding: "5px 15px",
+                    }}
+                  >
+                    {t("choose_payment_type")}
+                  </h3>
+                  <IonRadioGroup
+                    style={{ background: "white" }}
+                    allowEmptySelection={false}
+                    defaultChecked={true}
+                    value={paymentType}
+                    onIonChange={(e) => {
+                      setPaymenetType(e.detail.value);
+                    }}
+                  >
+                    <IonItem color={"dark"}>
+                      <IonLabel>{t("pay_with_credit")}</IonLabel>
+                      <IonRadio slot="start" value="pay with card" />
+                    </IonItem>
+
+                    <IonItem color={"dark"}>
+                      <IonLabel>{t("cash_on_delivery")}</IonLabel>
+                      <IonRadio slot="start" value="cash on delivery" />
+                    </IonItem>
+
+                    <IonItem color={"dark"}>
+                      <IonLabel>{t("donate")}</IonLabel>
+                      <IonRadio slot="start" value="donate" />
+                    </IonItem>
+                  </IonRadioGroup>
                   <div className="checkout__order">
                     <h4>{t("order")}</h4>
                     <div className="checkout__order__products">
@@ -549,12 +721,11 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
                         {numberWithCommas(products_cart_total?.total)}
                       </span>
                     </div>
-
                     {/* <p>Add your payment details to confirm your order.</p> */}
 
                     <button
                       type="submit"
-                      className="site-btn"
+                      className="primary-btn"
                       style={{
                         fontSize: language === "ar" ? "16px" : "14px",
                         letterSpacing: language === "ar" ? "0" : "5px",
@@ -610,6 +781,15 @@ const CheckOut: React.FC<any> = ({ feature, title, filterControl }) => {
           {totalAmount}
         </button>
       </form> */}
+      {success > 0 &&
+        presentToast(
+          "bottom",
+          success === 1
+            ? "Order has been created successfully"
+            : "Order was not created",
+          success === 1 ? "success" : "danger",
+          success === 1 ? checkmark : close
+        )}
       <StatusMessages messages={messages} />
     </>
   );

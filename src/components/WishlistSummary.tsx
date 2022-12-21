@@ -8,6 +8,8 @@ import {
   Product_Cart_Total,
 } from "../actions/UserAction";
 import Product_cart from "../reducers/ProductCartReducer";
+import { useIonToast } from "@ionic/react";
+import { checkmark } from "ionicons/icons";
 
 const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
   const [prodQty, setProdQty] = useState<any>(0);
@@ -15,6 +17,17 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
   const products_cart = useSelector((state: RootStore) => state.cart);
   const products_list = useSelector((state: RootStore) => state.products_list);
   const dispatch = useDispatch();
+
+  const [present] = useIonToast();
+  const presentToast = (position: "top" | "middle" | "bottom") => {
+    present({
+      message: "Added to cart successfully",
+      duration: 1500,
+      position: position,
+      icon: checkmark,
+      color: "success",
+    });
+  };
 
   useEffect(() => {
     dispatch(Product_Cart_Total(products_list, products_cart));
@@ -64,13 +77,12 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
     }
   };
 
-  const addToCart = (code: any) => {
+  const addToCart = (id: any) => {
     if (localStorage.getItem("w-commerce-token-qerfdswe")) {
       var product_value = JSON.parse(
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
-      var prodIndex = product_value?.findIndex((s: any) => s.code === code);
-      console.log("index", prodIndex);
+      var prodIndex = product_value?.findIndex((s: any) => s.id === id);
 
       if (prodIndex >= 0) {
         product_value[prodIndex].qty += 1;
@@ -79,7 +91,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
           JSON.stringify(product_value)
         );
       } else {
-        var temp_value = { code: code, qty: 1 };
+        var temp_value = { id, qty: 1 };
         product_value.push(temp_value);
         localStorage.setItem(
           "w-commerce-token-qerfdswe",
@@ -87,7 +99,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
         );
       }
     } else {
-      var new_value = [{ code: code, qty: 1 }];
+      var new_value = [{ id, qty: 1 }];
       localStorage.setItem(
         "w-commerce-token-qerfdswe",
         JSON.stringify(new_value)
@@ -108,13 +120,14 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
         <h5>{product?.product_name}</h5>
       </td>
       <td className="shoping__cart__price">
-        {product?.currencyCode} {numberWithCommas(product?.unitPrice)}
+        {product?.currencyCode} {numberWithCommas(product?.unit_price)}
       </td>
       <td className="shoping__cart__item__close">
         <div className="td_box">
           <img
             onClick={() => {
-              addToCart(product?.productCode);
+              addToCart(product?.id);
+              presentToast("bottom");
             }}
             className="social_media"
             src="/assets/img/002-shopping-bag.png"
@@ -123,7 +136,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
           />
           <img
             onClick={() => {
-              deleteProd(product?.productCode);
+              deleteProd(product?.id);
             }}
             className="social_media"
             src="/assets/img/delete.png"

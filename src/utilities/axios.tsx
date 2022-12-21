@@ -1,9 +1,12 @@
 import axios from "axios";
 
-// const baseURL = 'http://localhost:5000/api/v1/';
+export const baseURL = "http://13.40.236.30:8000/api/v1/";
+export const apiUrl = "http://13.40.236.30:8000";
+// export const baseURL = "http://localhost:8000/api/v1/";
+// export const apiUrl = "http://localhost:8000/";
 // const baseURL = 'https://api.storein.net/api/v1/';
 // const baseURL = 'https://api.winnerx.shop/api/v1/';
-const baseURL = "https://winnerx.herokuapp.com/api/v1/";
+// const baseURL = "https://winnerx.herokuapp.com/api/v1/";
 
 // alert(baseURL)
 const axiosInstance = axios.create({

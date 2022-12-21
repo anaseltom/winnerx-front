@@ -112,7 +112,6 @@ const CheckoutSummary: React.FC<any> = ({
           src={`${product?.image_url_main}`}
           alt=""
         />
-        {console.log(product)}
         <h5>
           {language === "en" ? product?.product_name : product?.product_name_ar}
         </h5>

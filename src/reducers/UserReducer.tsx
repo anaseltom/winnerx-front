@@ -7,7 +7,7 @@ const UserReducer = (state: any = {}, action: any) => {
     case USER_SIGNIN:
       // use the below return code if you have multiple items
       // return { ...state, items: action.payload };
-      console.log("actionpayload", action.payload)
+      // console.log("actionpayload", action.payload);
       return action.payload;
     case USER_INFO:
       return action.payload;

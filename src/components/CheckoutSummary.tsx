@@ -35,12 +35,12 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
     );
   }
 
-  const changeQty = (code: any, action: any) => {
+  const changeQty = (id: any, action: any) => {
     if (localStorage.getItem("w-commerce-token-qerfdswe")) {
       var product_value = JSON.parse(
         localStorage.getItem("w-commerce-token-qerfdswe")!
       );
-      var prodIndex = product_value?.findIndex((s: any) => s.code === code);
+      var prodIndex = product_value?.findIndex((s: any) => s.id === id);
       // console.log("index",prodIndex);
 
       if (prodIndex >= 0) {
@@ -80,7 +80,10 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
           style={{ objectFit: "contain" }}
           alt=""
         />
-        <h5>{product?.product_name}</h5>
+        <h5>
+          {product.parent_name && product?.parent_name + " / "}
+          {product?.product_name}
+        </h5>
       </td>
       <td className="shoping__cart__price" align="center">
         {product?.currencyCode} {numberWithCommas(product?.unit_price)}
@@ -90,7 +93,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
           <div className="pro-qty">
             <span
               onClick={() => {
-                changeQty(product?.product_code, "dec");
+                changeQty(product?.id, "dec");
               }}
               className="dec qtybtn"
             >
@@ -99,7 +102,7 @@ const CheckoutSummary: React.FC<any> = ({ product, qty }) => {
             <input type="text" value={prodQty} disabled />
             <span
               onClick={() => {
-                changeQty(product?.product_code, "inc");
+                changeQty(product?.id, "inc");
               }}
               className="inc qtybtn"
             >
